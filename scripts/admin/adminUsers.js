@@ -6,6 +6,10 @@ let hash = require("../../src/utils/hash");
 let config = require("../../config/api");
 let Core = require("../../src/core/Core");
 
+/*
+add/remove/edit admin users (users who can edit everything on the site)
+*/
+
 let passwordPrompt = new Prompt({
 	type: "password",
 	message: "Password: ",
