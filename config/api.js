@@ -42,6 +42,7 @@ let config = envs[env];
 let overrides = {
 	port: "PORT",
 	db: "DB",
+	tokenSecret: "TOKEN_SECRET",
 	nodeEnv: "NODE_ENV",
 	replOnly: null,
 };
