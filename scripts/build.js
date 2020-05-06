@@ -10,12 +10,12 @@ let svelte = require("../config/svelte");
 	process.chdir(root);
 	
 	let config = svelte({
-		dir: root + "/src",
+		dir: root + "/src/app",
 	});
 	
 	let engine = svelteViewEngine(config);
 	
-	await engine.render(root + "/src/App.svelte", {
+	await engine.render(root + "/src/app/App.svelte", {
 		_rebuild: true,
 	});
 	
