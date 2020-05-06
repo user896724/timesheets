@@ -1,10 +1,16 @@
 <script>
-import {getContext} from "svelte";
+import {onMount, getContext} from "svelte";
 
 let backend = getContext("backend");
 
-backend.interceptors.response.use(null, function(error) {
-	console.error(error);
+onMount(function() {
+	let apiErrorInterceptor = backend.interceptors.response.use(null, function(error) {
+		console.error(error);
+	});
+	
+	return function() {
+		backend.interceptors.response.eject(apiErrorInterceptor);
+	};
 });
 </script>
 
