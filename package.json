@@ -4,6 +4,7 @@
 	"description": "Timesheets project",
 	"author": "Gus Hogg-Blake",
 	"dependencies": {
+		"axios": "^0.19.2",
 		"bcryptjs": "^2.4.3",
 		"connection-string": "^3.2.2",
 		"dotenv": "^8.2.0",
@@ -13,7 +14,7 @@
 		"mysql": "^2.18.1",
 		"prompt-password": "^1.2.0",
 		"svelte-routing": "^1.4.2",
-		"yargs": "~6.5.0"
+		"svelte-view-engine": "^12.0.0"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.6.4",
@@ -32,6 +33,6 @@
 		"svelte": "^3.17.2",
 		"svelte-view-engine": "^12.0.0",
 		"terser": "^4.3.9",
-		"yargs": "~6.5.0"
+		"yargs": "^15.3.1"
 	}
 }

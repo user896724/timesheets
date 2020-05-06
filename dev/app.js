@@ -49,7 +49,9 @@ module.exports = async function(config) {
 	}));
 	
 	app.use(function(req, res) {
-		res.render("Index");
+		res.render("Index", {
+			apiBase: "//localhost:3120",
+		});
 	});
 	
 	return app;
