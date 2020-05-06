@@ -13,8 +13,7 @@
 		"moment": "^2.25.3",
 		"mysql": "^2.18.1",
 		"prompt-password": "^1.2.0",
-		"svelte-routing": "^1.4.2",
-		"svelte-view-engine": "^12.0.0"
+		"svelte-routing": "^1.4.2"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.6.4",
@@ -31,7 +30,7 @@
 		"rollup-plugin-node-resolve": "^5.2.0",
 		"rollup-plugin-svelte": "^5.1.0",
 		"svelte": "^3.17.2",
-		"svelte-view-engine": "^12.0.0",
+		"svelte-view-engine": "^12.0.2",
 		"terser": "^4.3.9",
 		"yargs": "^15.3.1"
 	}

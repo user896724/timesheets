@@ -1,5 +1,5 @@
 let yargs = require("yargs");
-let svelte = require("./svelte");
+let svelte = require("./svelteDev");
 
 yargs.alias({
 	p: "port",

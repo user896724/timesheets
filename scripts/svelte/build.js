@@ -1,7 +1,7 @@
 let yargs = require("yargs");
 let fs = require("flowfs");
 let buildDom = require("./buildDomComponent");
-//let buildSsr = require("./buildSsrComponent");
+let buildSsr = require("./buildSsrComponent");
 
 (async function() {
 	try {
@@ -19,21 +19,21 @@ let buildDom = require("./buildDomComponent");
 		if (useCache && await buildFile.exists()) {
 			let {
 				client,
-				//server,
+				server,
 			} = await buildFile.readJson();
 			
 			cache.client = client.cache;
-			//cache.server = server.cache;
+			cache.server = server.cache;
 		}
 		
 		let client = await buildDom(path, name, options, cache.client);
-		//let server = await buildSsr(path, options, cache.server);
+		let server = await buildSsr(path, options, cache.server);
 		
 		await buildFile.parent.mkdirp();
 		
 		await buildFile.writeJson({
 			client,
-			//server,
+			server,
 		});
 	} catch (e) {
 		console.error(e);

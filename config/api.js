@@ -1,4 +1,5 @@
 let yargs = require("yargs");
+let svelteMail = require("./svelteMail");
 
 require("dotenv").config();
 
@@ -25,6 +26,7 @@ function common(overrides) {
 		mailFrom: "Timesheets<timesheets@localhost>",
 		replOnly: false,
 		nodeEnv: "production",
+		svelteMail: svelteMail(),
 	}, overrides);
 }
 
@@ -32,6 +34,18 @@ let envs = {
 	dev: common({
 		watch: true,
 		nodeEnv: "development",
+		
+		svelteMail: svelteMail({
+			init: true,
+			watch: true,
+			liveReload: true,
+			liveReloadPort: 48011,
+			transpile: false,
+			minify: false,
+			rebuildOnRenderError: true,
+			renderBeforeInit: true,
+			dev: true,
+		}),
 	}),
 	
 	vps: common(),

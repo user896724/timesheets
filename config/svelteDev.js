@@ -14,4 +14,4 @@ module.exports = function(overrides) {
 		saveJs: false,
 		dev: false,
 	}, overrides);
-};
+}

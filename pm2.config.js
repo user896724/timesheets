@@ -7,6 +7,7 @@ module.exports = {
 			ignore_watch: [
 				".git",
 				"src/app",
+				"src/emails",
 			],
 		},
 	],
