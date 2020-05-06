@@ -6,9 +6,7 @@ module.exports = {
 			watch: true,
 			ignore_watch: [
 				".git",
-				"src/App.svelte",
-				"src/pages",
-				"src/components",
+				"src/app",
 			],
 		},
 	],
