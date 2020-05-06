@@ -5,16 +5,17 @@ import {Router, Route} from "svelte-routing";
 import axios from "axios";
 import _404 from "./pages/404.svelte";
 import Index from "./pages/Index.svelte";
+import Signup from "./pages/Signup.svelte";
 
 let {
 	apiBase,
 } = payload.get();
 
-let backend = axios.create({
+let api = axios.create({
 	baseURL: apiBase,
 });
 
-setContext("backend", backend);
+setContext("api", api);
 </script>
 
 <svelte:head>
@@ -24,6 +25,7 @@ setContext("backend", backend);
 	<style>
 		body {
 			font-family: "Nunito Sans", sans-serif;
+			color: #202020;
 			letter-spacing: .5px;
 			margin: 0;
 		}
@@ -31,10 +33,21 @@ setContext("backend", backend);
 		div, form {
 			box-sizing: border-box;
 		}
+		
+		a {
+			color: #202020;
+		}
+		
+		button {
+			font-family: inherit;
+			font-size: inherit;
+			cursor: pointer;
+		}
 	</style>
 </svelte:head>
 
 <Router>
 	<Route path="/" component={Index}/>
+	<Route path="/signup" component={Signup}/>
 	<Route component={_404}/>
 </Router>
