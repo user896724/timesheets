@@ -123,15 +123,15 @@ class Mysql {
 	buildWhere(fields) {
 		return Object.entries(fields).map(function([key, value]) {
 			if (value === null) {
-				return key + " is null";
+				return "`" + key + "` is null";
 			} else {
-				return key + " = :" + key;
+				return "`" + key + "` = :" + key;
 			}
 		}).join(" and ");
 	}
 	
 	buildUpdateQuery(row) {
-		return Object.keys(row).map(key => key + " = :" + key).join(", ");
+		return Object.keys(row).map(key => "`" + key + "` = :" + key).join(", ");
 	}
 	
 	buildInsertQuery(row) {
@@ -139,7 +139,7 @@ class Mysql {
 		let placeholders = keys.map(key => ":" + key);
 		
 		return {
-			fields: "(" + keys.join(", ") + ")",
+			fields: "(" + keys.map(k => "`" + k + "`").join(", ") + ")",
 			placeholders: "(" + placeholders.join(", ") + ")",
 			values: row,
 		};
@@ -150,7 +150,7 @@ class Mysql {
 		let placeholders = keys.map(_ => "?").join(", ");
 		
 		return {
-			fields: "(" + keys.join(", ") + ")",
+			fields: "(" + keys.map(k => "`" + k + "`").join(", ") + ")",
 			placeholders: rows.map(_ => "(" + placeholders + ")").join(", "),
 			values: [].concat(...rows.map(row => Object.values(row))),
 		};
