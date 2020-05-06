@@ -19,11 +19,6 @@ async function readPassword() {
 	return hash.hash(await passwordPrompt.run());
 }
 
-function error(msg) {
-	console.error(msg);
-	process.exit();
-}
-
 (async function() {
 	let db = await mysql(config.db);
 	
@@ -34,6 +29,7 @@ function error(msg) {
 		
 		let {
 			User,
+			relationships,
 		} = core;
 		
 		let {
@@ -43,7 +39,11 @@ function error(msg) {
 		
 		if (action === "add") {
 			if (!name && !email) {
-				error("Please provide --name and --email");
+				throw "Please provide --name and --email";
+			}
+			
+			if (await User.by.email(email)) {
+				throw "A user with that email already exists";
 			}
 			
 			let password = await readPassword();
@@ -54,15 +54,33 @@ function error(msg) {
 				password,
 			});
 			
-			console.log(user);
+			await relationships.add(user.id, "admin", "site");
 			
-			/*
-			TODO add admin relationship
-			*/
+			console.log("Admin " + email + " created");
+		} else {
+			if (!email) {
+				throw "Please provide --email";
+			}
 			
-			await user.save();
+			let user = await User.by.email(email);
 			
-			console.log("Admin " + name + " created");
+			if (!user) {
+				throw "User not found";
+			}
+			
+			if (action === "remove") {
+				await user.delete();
+				
+				console.log("Admin " + email + " deleted");
+			} else if (action === "password") {
+				let password = await readPassword();
+				
+				await user.update({
+					password,
+				});
+				
+				console.log("Password updated");
+			}
 		}
 	} catch (e) {
 		console.error(e);
