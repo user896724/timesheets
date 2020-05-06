@@ -1,9 +1,8 @@
 <script>
-
+import {Router, Route} from "svelte-routing";
+import Index from "./pages/Index.svelte";
 </script>
 
-<style>
-
-</style>
-
-App.
+<Router>
+	<Route path="/" component={Index}/>
+</Router>

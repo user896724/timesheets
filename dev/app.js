@@ -44,15 +44,12 @@ module.exports = async function(config) {
 		res.send("");
 	});
 	
-	app.get("/", function(req, res) {
-		res.render("Index");
-	});
-	
-	app.use(express.static("../static"));
+	app.use(express.static("../static", {
+		index: false,
+	}));
 	
 	app.use(function(req, res) {
-		res.status(404);
-		res.send("404");
+		res.render("Index");
 	});
 	
 	return app;

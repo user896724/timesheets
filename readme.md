@@ -43,9 +43,4 @@ Run the API:
 pm2 start pm2.config.js
 ```
 
-Serve /static using any web server:
-
-```
-cd static
-python -mSimpleHTTPServer
-```
+Serve /static using a web server that serves index.html for all non-asset paths ("SPA mode").

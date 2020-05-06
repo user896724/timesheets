@@ -12,6 +12,7 @@
 		"moment": "^2.25.3",
 		"mysql": "^2.18.1",
 		"prompt-password": "^1.2.0",
+		"svelte-routing": "^1.4.2",
 		"yargs": "~6.5.0"
 	},
 	"devDependencies": {
