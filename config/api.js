@@ -27,6 +27,9 @@ function common(overrides) {
 		replOnly: false,
 		nodeEnv: "production",
 		svelteMail: svelteMail(),
+		corsOrigins: [
+			/^http:\/\/tt$/,
+		],
 	}, overrides);
 }
 
