@@ -8,6 +8,7 @@ import Button from "../components/Button.svelte";
 import Main from "./Main.svelte";
 
 let api = getContext("api");
+let notificationChannel = getContext("notificationChannel");
 
 let companyName = "";
 let userName = "";
@@ -24,6 +25,10 @@ $: valid = companyName && userName && email && password;
 async function submit() {
 	if (!valid) {
 		return;
+	}
+	
+	if (error) {
+		notificationChannel.clear(error);
 	}
 	
 	loading = true;

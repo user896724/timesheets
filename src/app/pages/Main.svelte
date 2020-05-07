@@ -1,12 +1,20 @@
 <script>
 import {onMount, getContext} from "svelte";
 import {link} from "svelte-routing";
+import NotificationBar from "../components/NotificationBar.svelte";
 
 let api = getContext("api");
+let notifications = getContext("notificationChannel");
 
 onMount(function() {
 	let apiErrorInterceptor = api.interceptors.response.use(null, function(error) {
-		console.error(error);
+		notifications.send({
+			type: "error",
+			message: "An error occurred while communicating with the server" + Date.now(),
+			ref: error,
+		});
+		
+		return error;
 	});
 	
 	return function() {
@@ -49,6 +57,7 @@ onMount(function() {
 			TimeSheets
 		</a>
 	</div>
+	<NotificationBar channel={notifications}/>
 	<div id="page">
 		<slot/>
 	</div>
