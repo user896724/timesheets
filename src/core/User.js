@@ -106,6 +106,7 @@ module.exports = function(core, db) {
 		toJSON() {
 			return {
 				id: this.id,
+				email: this.email,
 				name: this.name,
 				relationships: this.relationships,
 			};
