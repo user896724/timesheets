@@ -3,6 +3,7 @@ import {setContext} from "svelte";
 import payload from "svelte-view-engine/payload";
 import {Router, Route} from "svelte-routing";
 import axios from "axios";
+import NotificationChannel from "../utils/NotificationChannel";
 import _404 from "./pages/404.svelte";
 import Index from "./pages/Index.svelte";
 import Signup from "./pages/Signup.svelte";
@@ -11,11 +12,11 @@ let {
 	apiBase,
 } = payload.get();
 
-let api = axios.create({
+setContext("api", axios.create({
 	baseURL: apiBase,
-});
+}));
 
-setContext("api", api);
+setContext("notificationChannel", new NotificationChannel());
 </script>
 
 <svelte:head>
