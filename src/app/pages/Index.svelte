@@ -23,14 +23,15 @@ console.log($user);
 }
 
 #headline {
-	font-size: 2em;
+	font-size: 2.4em;
 	font-weight: bold;
+	color: #565656;
 	margin-top: 1rem;
 }
 
 #tagline {
 	font-size: 1.2em;
-	color: #606060;
+	color: #595959;
 	margin-top: .5em;
 }
 
