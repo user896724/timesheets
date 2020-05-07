@@ -26,6 +26,10 @@ module.exports = function(core, db) {
 				entityId,
 			});
 		},
+		
+		addManager(companyId, userId) {
+			return rel.add(userId, "manager", "company", companyId);
+		},
 	};
 	
 	return rel;

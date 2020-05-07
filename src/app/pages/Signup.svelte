@@ -1,5 +1,5 @@
 <script>
-import {onMount, getContext} from "svelte";
+import {onMount, getContext, tick} from "svelte";
 import {fly, scale, slide} from "svelte/transition";
 import {quintOut} from "svelte/easing";
 import HttpStatus from "http-status-codes";
@@ -54,6 +54,8 @@ async function submit() {
 		
 		$authTokenStore = authToken;
 		$userStore = user;
+		
+		await tick();
 		
 		await api.post("/companies", {
 			name: companyName,

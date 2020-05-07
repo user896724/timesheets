@@ -19,7 +19,7 @@ let helpers = {
 		return hasRel(user, "admin", "site");
 	},
 	
-	isManager(user, companyId) {
+	isManager(user, companyId=null) {
 		return hasRel(user, "manager", "company", companyId);
 	},
 };
