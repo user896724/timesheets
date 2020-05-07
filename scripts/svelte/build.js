@@ -23,18 +23,23 @@ let buildSsr = require("./buildSsrComponent");
 			} = await buildFile.readJson();
 			
 			cache.client = client.cache;
-			cache.server = server.cache;
+			
+			if (server) {
+				cache.server = server.cache;
+			}
 		}
 		
-		let client = await buildDom(path, name, options, cache.client);
-		let server = await buildSsr(path, options, cache.server);
+		let json = {
+			client: await buildDom(path, name, options, cache.client),
+		};
+		
+		if (options.ssr) {
+			json.server = await buildSsr(path, options, cache.server);
+		}
 		
 		await buildFile.parent.mkdirp();
 		
-		await buildFile.writeJson({
-			client,
-			server,
-		});
+		await buildFile.writeJson(json);
 	} catch (e) {
 		console.error(e);
 		

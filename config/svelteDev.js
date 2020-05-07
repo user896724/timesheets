@@ -13,5 +13,6 @@ module.exports = function(overrides) {
 		clientCss: true,
 		saveJs: false,
 		dev: false,
+		ssr: false,
 	}, overrides);
 }
