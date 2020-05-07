@@ -91,14 +91,6 @@ let inputRow = {
 </script>
 
 <style>
-#back {
-	display: flex;
-	flex-direction: column;
-	flex-grow: 1;
-	padding: 1em;
-	background: #efefef;
-}
-
 #intro {
 	text-align: center;
 	width: 800px;
