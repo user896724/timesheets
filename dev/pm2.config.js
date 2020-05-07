@@ -1,7 +1,7 @@
 module.exports = {
 	apps: [
 		{
-			name: "timesheets-dev",
+			name: "toptal-dev",
 			script: "main.js",
 		},
 	],

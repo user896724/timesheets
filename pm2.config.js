@@ -1,7 +1,7 @@
 module.exports = {
 	apps: [
 		{
-			name: "timesheets-api",
+			name: "toptal-api",
 			script: "src/main.js",
 			watch: true,
 			ignore_watch: [
