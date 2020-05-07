@@ -37,12 +37,6 @@ setContext("api", api);
 		a {
 			color: #202020;
 		}
-		
-		button {
-			font-family: inherit;
-			font-size: inherit;
-			cursor: pointer;
-		}
 	</style>
 </svelte:head>
 

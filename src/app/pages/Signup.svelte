@@ -4,6 +4,7 @@ import {fly, scale, slide} from "svelte/transition";
 import {quintOut} from "svelte/easing";
 import {groupBy, ungroup} from "../../utils/collections";
 import Field from "../components/forms/Field.svelte";
+import Button from "../components/Button.svelte";
 import Main from "./Main.svelte";
 
 let api = getContext("api");
@@ -142,19 +143,6 @@ let inputRow = {
 	margin-top: 1.5em;
 	margin-bottom: 1em;
 }
-
-#submit {
-	text-decoration: none;
-	color: white;
-	text-shadow: 1px 1px #00000040;
-	padding: 1em;
-	border: 1px solid #C98C2A;
-	border: 1px solid #298FC6;
-	border-radius: 4px;
-	box-shadow: inset 0 0 2px #ffffff80;
-	background: linear-gradient(#F4A824, #E58E02);
-	background: linear-gradient(#4BA8DD, #148ABC);
-}
 </style>
 
 <Main>
@@ -180,10 +168,8 @@ let inputRow = {
 						Continue to the dashboard to set up employee accounts.
 					</div>
 					<div id="successActions">
-						<a
-							id="goToDashboard"
+						<Button
 							href="/admin"
-							use:link
 							label="Go to dashboard"
 						/>
 					</div>
@@ -235,17 +221,13 @@ let inputRow = {
 						</div>
 					{/if}
 					<div id="actions">
-						<button
-							id="submit"
+						<Button
 							type="submit"
+							large
+							primary
 							disabled={!valid || loading}
-						>
-							{#if loading}
-								Checking details...
-							{:else}
-								Sign up
-							{/if}
-						</button>
+							label={loading ? "Checking details..." : "Sign up"}
+						/>
 					</div>
 				</form>
 			</div>

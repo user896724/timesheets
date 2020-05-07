@@ -1,6 +1,7 @@
 <script>
 import {link} from "svelte-routing";
 import user from "../stores/user";
+import Button from "../components/Button.svelte";
 import Main from "./Main.svelte";
 
 console.log($user);
@@ -43,19 +44,6 @@ console.log($user);
 	}
 }
 
-#signupButton {
-	text-decoration: none;
-	color: white;
-	text-shadow: 1px 1px #00000040;
-	padding: 1em;
-	border: 1px solid #C98C2A;
-	border: 1px solid #298FC6;
-	border-radius: 4px;
-	box-shadow: inset 0 0 2px #ffffff80;
-	background: linear-gradient(#F4A824, #E58E02);
-	background: linear-gradient(#4BA8DD, #148ABC);
-}
-
 #loginButton {
 	margin-left: 1em;
 }
@@ -73,13 +61,12 @@ console.log($user);
 			so you can spend more time getting things done.
 		</div>
 		<div id="cta">
-			<a
-				id="signupButton"
+			<Button
 				href="/signup"
-				use:link
-			>
-				Sign up
-			</a>
+				large
+				primary
+				label="Sign up"
+			/>
 			<a
 				id="loginButton"
 				href={$user ? "/home" : "/login"}
