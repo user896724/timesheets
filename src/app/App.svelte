@@ -4,6 +4,7 @@ import payload from "svelte-view-engine/payload";
 import {Router, Route} from "svelte-routing";
 import axios from "axios";
 import NotificationChannel from "../utils/NotificationChannel";
+import authToken from "./stores/authToken";
 import _404 from "./pages/404.svelte";
 import Index from "./pages/Index.svelte";
 import Signup from "./pages/Signup.svelte";
@@ -12,10 +13,13 @@ let {
 	apiBase,
 } = payload.get();
 
-setContext("api", axios.create({
+let api = axios.create({
 	baseURL: apiBase,
-}));
+});
 
+$: api.defaults.headers.common["Authorization"] = $authToken;
+
+setContext("api", api);
 setContext("notificationChannel", new NotificationChannel());
 </script>
 

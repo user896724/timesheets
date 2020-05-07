@@ -1,3 +1,3 @@
-let Writable = require("./Writable");
+let LocalStorage = require("./LocalStorage");
 
-module.exports = new Writable(null);
+module.exports = new LocalStorage("user", null);

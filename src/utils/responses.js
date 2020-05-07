@@ -25,8 +25,10 @@ module.exports = {
 	notFound: error(HttpStatus.NOT_FOUND),
 	conflict: error(HttpStatus.CONFLICT),
 	badRequest: error(HttpStatus.BAD_REQUEST),
+	unauthorized: error(HttpStatus.UNAUTHORIZED),
 	
 	created: ok(HttpStatus.CREATED),
+	ok: ok(HttpStatus.OK),
 	
 	serverError(res, error) {
 		console.error(error);

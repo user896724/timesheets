@@ -2,7 +2,10 @@
 import {onMount, getContext} from "svelte";
 import {fly, scale, slide} from "svelte/transition";
 import {quintOut} from "svelte/easing";
+import HttpStatus from "http-status-codes";
 import {groupBy, ungroup} from "../../utils/collections";
+import authTokenStore from "../stores/authToken";
+import userStore from "../stores/user";
 import Field from "../components/forms/Field.svelte";
 import Button from "../components/Button.svelte";
 import Main from "./Main.svelte";
@@ -21,6 +24,7 @@ let error = null;
 let formOutroFinished = false;
 
 $: valid = companyName && userName && email && password;
+$: errorStatus = error && error.response && error.response.status;
 
 async function submit() {
 	if (!valid) {
@@ -33,21 +37,39 @@ async function submit() {
 	
 	loading = true;
 	
-	error = await api.post("/company-manager", {
-		companyName,
-		userName,
-		email,
-		password,
-	});
+	try {
+		await api.post("/users", {
+			name: userName,
+			email,
+			password,
+		});
+		
+		let {
+			authToken,
+			user,
+		} = (await api.post("/login", {
+			email,
+			password,
+		})).data;
+		
+		$authTokenStore = authToken;
+		$userStore = user;
+		
+		await api.post("/companies", {
+			name: companyName,
+			adminUserId: user.id,
+		});
+		
+		success = true;
+	} catch (e) {
+		error = e;
+	}
 	
-	console.log(error);
-	
-	success = !error;
 	loading = false;
 }
 
 function changeEmail() {
-	if (error === "emailExists") {
+	if (errorStatus === HttpStatus.CONFLICT) {
 		error = null;
 	}
 }
@@ -220,9 +242,9 @@ let inputRow = {
 						bind:value={password}
 						disabled={loading}
 					/>
-					{#if error === "emailExists"}
+					{#if error}
 						<div class="error" out:scale={scaleInOut}>
-							There is already a registered account with the email provided.
+							{error}
 						</div>
 					{/if}
 					<div id="actions">
