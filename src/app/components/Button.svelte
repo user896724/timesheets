@@ -136,8 +136,8 @@ function iconOpacity(icon) {
 	}
 	
 	&.disabled {
-		text-shadow: none;
-		color: #bab9b8;
+		text-shadow: none !important;
+		color: #bab9b8 !important;
 		border-color: #d2d2d2 !important;
 		box-shadow: none !important;
 		cursor: default;
