@@ -1,6 +1,6 @@
 <script>
 import {onMount, getContext} from "svelte";
-import {link} from "svelte-routing";
+import {links} from "svelte-routing";
 import NotificationBar from "../components/NotificationBar.svelte";
 
 let api = getContext("api");
@@ -51,9 +51,9 @@ onMount(function() {
 }
 </style>
 
-<div id="main" aria-live="assertive">
+<div id="main" aria-live="assertive" use:links>
 	<div id="topBar">
-		<a id="badge" href="/" use:link>
+		<a id="badge" href="/">
 			TimeSheets
 		</a>
 	</div>

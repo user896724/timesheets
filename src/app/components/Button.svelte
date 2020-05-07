@@ -1,6 +1,5 @@
 <script>
 import {createEventDispatcher} from "svelte";
-import {link} from "svelte-routing";
 import bodyClick from "../../utils/dom/bodyClick.js";
 import inlineStyle from "../../utils/dom/inlineStyle";
 
@@ -220,7 +219,6 @@ span.arrow {
 		class:disabled
 		style={inlineStyle(circleStyle, css)}
 		{href}
-		use:link
 		{title}
 		on:click={click}
 		tabindex={notab ? -1 : ""}

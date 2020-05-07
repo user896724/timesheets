@@ -1,5 +1,4 @@
 <script>
-import {link} from "svelte-routing";
 import user from "../stores/user";
 import Button from "../components/Button.svelte";
 import Main from "./Main.svelte";
@@ -71,7 +70,6 @@ console.log($user);
 			<a
 				id="loginButton"
 				href={$user ? "/home" : "/login"}
-				use:link
 			>
 				Log in
 			</a>
