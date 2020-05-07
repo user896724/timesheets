@@ -14,7 +14,7 @@ onMount(function() {
 			ref: error,
 		});
 		
-		return error;
+		throw error;
 	});
 	
 	return function() {
