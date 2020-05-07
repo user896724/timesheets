@@ -35,7 +35,7 @@ async function submit() {
 	
 	error = await api.post("/company-manager", {
 		companyName,
-		usreName,
+		userName,
 		email,
 		password,
 	});
