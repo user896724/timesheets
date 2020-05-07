@@ -4,6 +4,7 @@ let cors = require("cors");
 let expressAsyncWrap = require("./utils/routing/expressAsyncWrap");
 let loadRoutes = require("./utils/routing/loadRoutes");
 let {notFound, serverError} = require("./utils/responses");
+let authenticate = require("./middleware/authenticate");
 let mail = require("./modules/mail/mail");
 
 module.exports = async function(core, config, db) {
@@ -26,6 +27,8 @@ module.exports = async function(core, config, db) {
 		limit: "32kb",
 		strict: false,
 	}));
+	
+	app.use(authenticate(app, core));
 	
 	await loadRoutes(__dirname + "/routes", app, core, db);
 	
