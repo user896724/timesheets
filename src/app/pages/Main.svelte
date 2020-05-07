@@ -1,6 +1,8 @@
 <script>
 import {onMount, getContext} from "svelte";
 import {links} from "svelte-routing";
+import user from "../stores/user";
+import UserWidget from "../components/UserWidget.svelte";
 import NotificationBar from "../components/NotificationBar.svelte";
 
 let api = getContext("api");
@@ -32,8 +34,14 @@ onMount(function() {
 }
 
 #topBar {
+	display: flex;
+	align-items: center;
 	padding: 1em;
 	background: white;
+}
+
+#user {
+	margin-left: auto;
 }
 
 #badge {
@@ -56,6 +64,11 @@ onMount(function() {
 		<a id="badge" href="/">
 			TimeSheets
 		</a>
+		<div id="user">
+			{#if $user}
+				<UserWidget user={$user}/>
+			{/if}
+		</div>
 	</div>
 	<NotificationBar channel={notifications}/>
 	<div id="page">
