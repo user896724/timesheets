@@ -1,6 +1,7 @@
 <script>
 import {onMount, getContext} from "svelte";
 import {links} from "svelte-routing";
+import HttpStatus from "http-status-codes";
 import user from "../stores/user";
 import UserWidget from "../components/UserWidget.svelte";
 import NotificationBar from "../components/NotificationBar.svelte";
@@ -10,11 +11,13 @@ let notifications = getContext("notificationChannel");
 
 onMount(function() {
 	let apiErrorInterceptor = api.interceptors.response.use(null, function(error) {
-		notifications.send({
-			type: "error",
-			message: "An error occurred while communicating with the server" + Date.now(),
-			ref: error,
-		});
+		if ([0, HttpStatus.INTERNAL_SERVER_ERROR].includes(error.request.status)) {
+			notifications.send({
+				type: "error",
+				message: "An error occurred while communicating with the server",
+				ref: error,
+			});
+		}
 		
 		throw error;
 	});
