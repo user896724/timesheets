@@ -189,7 +189,7 @@ let inputRow = {
 					</div>
 					<div id="successActions">
 						<Button
-							href="/admin"
+							href="/home"
 							label="Go to dashboard"
 						/>
 					</div>
