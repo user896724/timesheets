@@ -1,6 +1,7 @@
 <script>
 import {onMount, getContext} from "svelte";
 import {links} from "svelte-routing";
+import {LOCATION} from "svelte-routing/src/contexts";
 import HttpStatus from "http-status-codes";
 import user from "../stores/user";
 import UserWidget from "../components/UserWidget.svelte";
@@ -8,6 +9,11 @@ import NotificationBar from "../components/NotificationBar.svelte";
 
 let api = getContext("api");
 let notifications = getContext("notificationChannel");
+let location = getContext(LOCATION);
+
+$: if ($location) {
+	notifications.clear();
+}
 
 onMount(function() {
 	let apiErrorInterceptor = api.interceptors.response.use(null, function(error) {
