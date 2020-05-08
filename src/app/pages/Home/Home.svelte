@@ -6,7 +6,6 @@ import {LOCATION} from "svelte-routing/src/contexts";
 import axios from "axios";
 import authorisationHelpers from "../../../modules/authorisationHelpers";
 import {requireManager} from "../../utils/routeGuards";
-import pathname from "../../stores/pathname";
 import authTokenStore from "../../stores/authToken";
 import userStore from "../../stores/user";
 import Button from "../../components/Button.svelte";
