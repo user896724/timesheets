@@ -4,10 +4,13 @@ import payload from "svelte-view-engine/payload";
 import {Router, Route} from "svelte-routing";
 import axios from "axios";
 import NotificationChannel from "../utils/NotificationChannel";
+import {requireLogin} from "./utils/routeGuards";
 import authToken from "./stores/authToken";
+import user from "./stores/user";
 import _404 from "./pages/404.svelte";
 import Index from "./pages/Index.svelte";
 import Signup from "./pages/Signup.svelte";
+import Home from "./pages/Home/Home.svelte";
 import Logout from "./pages/Logout.svelte";
 
 let {
@@ -49,6 +52,7 @@ setContext("notificationChannel", new NotificationChannel());
 <Router>
 	<Route path="/" component={Index}/>
 	<Route path="/signup" component={Signup}/>
+	<Route path="/home/*" component={requireLogin($user, Home)}/>
 	<Route path="/logout" component={Logout}/>
 	<Route component={_404}/>
 </Router>
