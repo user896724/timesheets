@@ -1,20 +1,14 @@
 <script>
 import {onMount, getContext} from "svelte";
-import HttpStatus from "http-status-codes";
 import {Router, Route} from "svelte-routing";
 import {LOCATION} from "svelte-routing/src/contexts";
-import axios from "axios";
 import authorisationHelpers from "../../../modules/authorisationHelpers";
 import {requireManager} from "../../utils/routeGuards";
-import authTokenStore from "../../stores/authToken";
 import userStore from "../../stores/user";
-import Button from "../../components/Button.svelte";
 import Main from "../Main.svelte";
 import Time from "./Time.svelte";
 import Users from "./Users.svelte";
 
-let api = getContext("api");
-let notificationChannel = getContext("notificationChannel");
 let location = getContext(LOCATION);
 </script>
 
