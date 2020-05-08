@@ -9,9 +9,15 @@ module.exports = class {
 		}
 	}
 	
-	clear(ref) {
+	remove(ref) {
 		for (let handler of this.handlers) {
-			handler.clear(ref);
+			handler.remove(ref);
+		}
+	}
+	
+	clear() {
+		for (let handler of this.handlers) {
+			handler.clear();
 		}
 	}
 

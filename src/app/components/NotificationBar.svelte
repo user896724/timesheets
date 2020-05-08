@@ -30,8 +30,12 @@ channel.receive({
 		}
 	},
 	
-	clear(ref) {
+	remove(ref) {
 		notifs = notifs.filter(n => n.ref !== ref);
+	},
+	
+	clear() {
+		notifs = [];
 	},
 });
 

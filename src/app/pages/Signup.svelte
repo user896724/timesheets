@@ -31,7 +31,7 @@ async function submit() {
 	}
 	
 	if (error) {
-		notificationChannel.clear(error);
+		notificationChannel.remove(error);
 	}
 	
 	loading = true;
