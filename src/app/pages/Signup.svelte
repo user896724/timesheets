@@ -1,9 +1,8 @@
 <script>
-import {onMount, getContext, tick} from "svelte";
+import {getContext, tick} from "svelte";
 import {fly, scale, slide} from "svelte/transition";
 import {quintOut} from "svelte/easing";
 import HttpStatus from "http-status-codes";
-import {groupBy, ungroup} from "../../utils/collections";
 import authTokenStore from "../stores/authToken";
 import userStore from "../stores/user";
 import Field from "../components/forms/Field.svelte";
