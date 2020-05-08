@@ -8,6 +8,7 @@ import authToken from "./stores/authToken";
 import _404 from "./pages/404.svelte";
 import Index from "./pages/Index.svelte";
 import Signup from "./pages/Signup.svelte";
+import Logout from "./pages/Logout.svelte";
 
 let {
 	apiBase,
@@ -48,5 +49,6 @@ setContext("notificationChannel", new NotificationChannel());
 <Router>
 	<Route path="/" component={Index}/>
 	<Route path="/signup" component={Signup}/>
+	<Route path="/logout" component={Logout}/>
 	<Route component={_404}/>
 </Router>
