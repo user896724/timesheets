@@ -2,8 +2,6 @@
 import user from "../stores/user";
 import Button from "../components/Button.svelte";
 import Main from "./Main.svelte";
-
-console.log($user);
 </script>
 
 <style>
