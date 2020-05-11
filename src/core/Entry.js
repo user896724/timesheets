@@ -1,4 +1,6 @@
 module.exports = function(core, db) {
+	let itemsPerPage = 10;
+
 	class Entry {
 		constructor(details={}) {
 			Object.assign(this, {
@@ -34,6 +36,51 @@ module.exports = function(core, db) {
 			} else {
 				return null;
 			}
+		}
+		
+		static async list(userId, from, to, page=0) {
+			let where = [db.buildWhere({
+				userId,
+			})];
+			
+			if (from) {
+				where.push("dateWorked >= :from");
+			}
+			
+			if (to) {
+				where.push("dateWorked <= :to");
+			}
+			
+			let whereString = where.join(" and ");
+			
+			if (whereString) {
+				whereString = "where " + whereString;
+			}
+			
+			page *= itemsPerPage;
+			
+			let query = select => `
+				select ${select} from entries
+				${whereString}
+				limit :itemsPerPage offset :page
+			`;
+			
+			let params = {
+				userId,
+				from,
+				to,
+				itemsPerPage,
+				page,
+			}
+			
+			let total = await db.cell(query("count(*)"), params);
+			let rows = await db.query(query("*"), params);
+			
+			return {
+				total,
+				rows,
+				itemsPerPage,
+			};
 		}
 		
 		get notes() {
