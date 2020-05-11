@@ -36,8 +36,6 @@ updateOriginalRows();
 $: sortedRows = order ? sortBy(result.rows, order.field, order.dir === "desc") : result.rows;
 
 $: changedRows = sortedRows.filter(function(row) {
-	console.log(originalRows);
-	console.log(row);
 	return JSON.stringify(row) !== JSON.stringify(originalRows[row.id]);
 });
 
@@ -119,10 +117,6 @@ async function refresh() {
 }
 
 refresh();
-//
-//onMount(function() {
-//	let 
-//});
 
 /*
 hide buttons using visibility to prevent the table rejigging when it
