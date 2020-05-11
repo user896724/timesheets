@@ -37,7 +37,7 @@ module.exports = function(app, core, db) {
 		next();
 	});
 	
-	router.post("/entries", async function(req, res) {
+	router.post("/", async function(req, res) {
 		let {
 			userId,
 			entry: {
@@ -57,7 +57,7 @@ module.exports = function(app, core, db) {
 		ok(res, entry);
 	});
 	
-	router.get("/entries", async function(req, res) {
+	router.get("/", async function(req, res) {
 		let {
 			userId,
 			from,
@@ -104,5 +104,5 @@ module.exports = function(app, core, db) {
 		});
 	});
 	
-	app.use(router);
+	app.use("/entries", router);
 }
