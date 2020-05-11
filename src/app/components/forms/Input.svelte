@@ -1,4 +1,7 @@
 <script>
+import moment from "moment";
+import {onMount} from "svelte";
+import datepicker from "js-datepicker";
 import inlineStyle from "../../../utils/dom/inlineStyle";
 import Dropdown from "./Dropdown.svelte";
 
@@ -13,6 +16,7 @@ export let required = false;
 export let newPassword = false;
 export let pattern = null;
 export let grow = false;
+export let table = false;
 export let css = null;
 export let hintId = null;
 
@@ -32,6 +36,18 @@ function _focus() {
 function blur() {
 	focused = false;
 }
+
+onMount(function() {
+	if (type === "date") {
+		datepicker(input, {
+			formatter(input, date) {
+				value = moment(date).format("YYYY-MM-DD");
+			},
+			
+			dateSelected: new Date(value && value.toString() || new Date()),
+		});
+	}
+});
 </script>
 
 <style>
@@ -49,20 +65,27 @@ textarea {
 	border-radius: 4px;
 	padding: .7rem;
 	box-sizing: border-box;
+	
+	&.table {
+		flex-grow: 1;
+		border: 0;
+		border-radius: 0;
+		background: transparent;
+	}
 }
 
 #{$inputs} {
-	width: 18rem;
+	width: 12rem;
 	max-width: 100%;
 	
-	&.grow {
+	&.grow, &.table {
 		width: 100%;
 	}
 }
 </style>
 
 <!-- type can't be dynamic with 2 way binding on value -->
-{#if type === "text"}
+{#if type === "text" || type === "date"}
 	<input
 		{id}
 		{name}
@@ -72,6 +95,7 @@ textarea {
 		bind:value
 		class:disabled
 		class:grow
+		class:table
 		style={inlineStyle(css)}
 		{required}
 		{pattern}
@@ -97,6 +121,7 @@ textarea {
 		bind:value
 		class:disabled
 		class:grow
+		class:table
 		style={inlineStyle(css)}
 		{required}
 		{placeholder}
@@ -121,6 +146,7 @@ textarea {
 		bind:value
 		class:disabled
 		class:grow
+		class:table
 		style={inlineStyle(css)}
 		{required}
 		{placeholder}
@@ -145,6 +171,7 @@ textarea {
 		bind:value
 		class:disabled
 		class:grow
+		class:table
 		style={inlineStyle(css)}
 		{required}
 		{placeholder}
@@ -170,6 +197,7 @@ textarea {
 			bind:this={input}
 			bind:value
 			class:disabled
+			class:table
 			style={inlineStyle(css)}
 			{required}
 			{disabled}

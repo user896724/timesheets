@@ -48,6 +48,10 @@ class DateTime {
 		return this.moment.format(this.format);
 	}
 	
+	toJSON() {
+		return this.toString();
+	}
+	
 	static fromString(string) {
 		let type = typeFromLength[string.length];
 		let format = formats[type];

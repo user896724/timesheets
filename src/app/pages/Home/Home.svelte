@@ -33,6 +33,7 @@ let location = getContext(LOCATION);
 
 #page {
 	flex-grow: 1;
+	padding: 1em;
 	background: white;
 }
 </style>
