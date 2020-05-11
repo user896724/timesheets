@@ -121,7 +121,9 @@ class Mysql {
 	}
 	
 	buildWhere(fields) {
-		return Object.entries(fields).map(function([key, value]) {
+		return Object.entries(fields).filter(function([key, value]) {
+			return value !== undefined;
+		}).map(function([key, value]) {
 			if (value === null) {
 				return "`" + key + "` is null";
 			} else {
