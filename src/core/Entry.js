@@ -38,7 +38,7 @@ module.exports = function(core, db) {
 			}
 		}
 		
-		static async list(userId, from, to, page=0) {
+		static async list(userId, from, to, order, page=0) {
 			let where = [db.buildWhere({
 				userId,
 			})];
@@ -62,6 +62,7 @@ module.exports = function(core, db) {
 			let query = select => `
 				select ${select} from entries
 				${whereString}
+				${order ? "order by " + order.field + " " + order.dir : ""}
 				limit :itemsPerPage offset :page
 			`;
 			

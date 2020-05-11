@@ -63,7 +63,18 @@ module.exports = function(app, core, db) {
 			from,
 			to,
 			page,
+			orderBy,
+			orderDir,
 		} = req.query;
+		
+		let order = null;
+		
+		if (orderBy) {
+			order = {
+				field: orderBy,
+				dir: orderDir,
+			};
+		}
 		
 		if (userId) {
 			userId = Number(userId);
@@ -83,7 +94,7 @@ module.exports = function(app, core, db) {
 			rows,
 			total,
 			itemsPerPage,
-		} = await Entry.list(userId, from, to, page);
+		} = await Entry.list(userId, from, to, order, page);
 		
 		res.json({
 			page,

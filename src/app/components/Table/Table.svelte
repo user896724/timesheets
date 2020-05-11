@@ -14,6 +14,7 @@ export let create = null;
 export let updateOne;
 export let updateMany;
 export let _delete;
+export let order = null;
 
 let fire = createEventDispatcher();
 
@@ -31,8 +32,6 @@ function updateOriginalRows() {
 }
 
 updateOriginalRows();
-
-let order = null;
 
 $: sortedRows = order ? sortBy(result.rows, order.field, order.dir === "desc") : result.rows;
 

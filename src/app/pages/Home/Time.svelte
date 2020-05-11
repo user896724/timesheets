@@ -87,6 +87,11 @@ function updateMany(rows) {
 function _delete(row) {
 	return api.delete("/entry/" + row.id);
 }
+
+let order = {
+	field: "dateWorked",
+	dir: "desc",
+};
 </script>
 
 <style>
@@ -117,5 +122,6 @@ function _delete(row) {
 		{updateOne}
 		{updateMany}
 		{_delete}
+		{order}
 	/>
 </div>
