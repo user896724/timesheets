@@ -22,6 +22,21 @@ let helpers = {
 	isManager(user, companyId=null) {
 		return hasRel(user, "manager", "company", companyId);
 	},
+	
+	isManagerOf(manager, user) {
+		let managerRelationships = findRels(manager, "manager", "company");
+		let userRelationships = findRels(user, "worker", "company");
+		
+		for (let managerRel of managerRelationships) {
+			if (userRelationships.filter(function(rel) {
+				return rel.entityId === managerRel.entityId;
+			}).length > 0) {
+				return true;
+			}
+		}
+		
+		return false;
+	},
 };
 
 module.exports = helpers;
