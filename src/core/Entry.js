@@ -61,6 +61,7 @@ module.exports = function(core, db) {
 			
 			let query = select => `
 				select ${select} from entries
+				join users on users.id = entries.userId
 				${whereString}
 				${order ? "order by " + order.field + " " + order.dir : ""}
 				limit :itemsPerPage offset :page
@@ -75,7 +76,7 @@ module.exports = function(core, db) {
 			}
 			
 			let total = await db.cell(query("count(*)"), params);
-			let rows = await db.query(query("*"), params);
+			let rows = await db.query(query("entries.*, users.name as user"), params);
 			
 			return {
 				total,

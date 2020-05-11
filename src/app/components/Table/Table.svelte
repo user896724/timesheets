@@ -148,6 +148,11 @@ table {
 
 td, th {
 	border: 1px solid #d8d8d8;
+	padding: 3px 7px;
+	
+	&.edit {
+		padding: 0;
+	}
 }
 
 tr {
@@ -197,7 +202,7 @@ tr {
 								on:order={clickOrder}
 							/>
 						{:else}
-							{field.name}
+							{field.label}
 						{/if}
 					</th>
 				{/each}
@@ -210,10 +215,12 @@ tr {
 					<tr>
 						{#each fields as field}
 							<td class="edit">
-								<svelte:component
-									this={editorComponents[field.type]}
-									bind:value={_new[field.name]}
-								/>
+								{#if field.type}
+									<svelte:component
+										this={editorComponents[field.type]}
+										bind:value={_new[field.name]}
+									/>
+								{/if}
 							</td>
 						{/each}
 						<td>
@@ -233,12 +240,18 @@ tr {
 				{#each sortedRows as row (row.id)}
 					<tr>
 						{#each fields as field}
-							<td class="edit">
-								<svelte:component
-									this={editorComponents[field.type]}
-									bind:value={row[field.name]}
-								/>
-							</td>
+							{#if field.type}
+								<td class="edit">
+									<svelte:component
+										this={editorComponents[field.type]}
+										bind:value={row[field.name]}
+									/>
+								</td>
+							{:else}
+								<td>
+									{row[field.name]}
+								</td>
+							{/if}
 						{/each}
 						<td>
 							<Button

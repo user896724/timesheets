@@ -6,12 +6,18 @@ import userStore from "../../stores/user";
 import Button from "../../components/Button.svelte";
 import Table from "../../components/Table/Table.svelte";
 
+export let userId = null;
+
+$: if (!userId) {
+	userId = $userStore.id;
+}
+
 let api = getContext("api");
 let notificationChannel = getContext("notificationChannel");
 
 let error;
 
-let fields = [
+let commonFields = [
 	{
 		name: "dateWorked",
 		type: "date",
@@ -30,6 +36,14 @@ let fields = [
 		label: "Hours",
 		orderable: true,
 	},
+];
+
+$: fields = userId === $userStore.id ? commonFields : [
+	{
+		name: "user",
+		label: "User",
+	},
+	...commonFields,
 ];
 
 async function getEntries(page, filters, order) {
@@ -62,7 +76,7 @@ async function getEntries(page, filters, order) {
 
 function newRow() {
 	return {
-		userId: $userStore.id,
+		userId,
 		dateWorked: DateTime.today().toString(),
 		description: "",
 		hours: 1,
