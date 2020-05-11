@@ -72,9 +72,7 @@ function confirmDelete(row) {
 async function deleteRow(row) {
 	await _delete(row);
 	
-	rows = remove(rows, row);
-	
-	updateOriginalRows();
+	refresh();
 }
 
 function clickOrder({detail: field}) {

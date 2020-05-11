@@ -1,4 +1,4 @@
-let {unauthorized, badRequest, ok} = require("../utils/responses");
+let {unauthorized, notFound, badRequest, ok} = require("../utils/responses");
 let requireAuth = require("../middleware/requireAuth");
 let authorisationHelpers = require("../modules/authorisationHelpers");
 let Router = require("../utils/routing/Router");
@@ -102,6 +102,19 @@ module.exports = function(app, core, db) {
 			total,
 			itemsPerPage,
 		});
+	});
+	
+	router.delete("/:id", async function(req, res) {
+		let id = Number(req.params.id);
+		let entry = await Entry.by.id(id);
+		
+		if (!entry) {
+			return notFound(res);
+		}
+		
+		await entry.delete();
+		
+		ok(res);
 	});
 	
 	app.use("/entries", router);

@@ -125,6 +125,10 @@ module.exports = function(core, db) {
 			await db.delete("entries", {
 				id: this.id,
 			});
+			
+			await db.delete("entryNotes", {
+				entryId: this.id,
+			});
 		}
 		
 		toRow() {

@@ -85,13 +85,13 @@ function newRow() {
 
 function create(row) {
 	return api.post("/entries", {
-		userId: $userStore.id,
+		userId,
 		entry: row,
 	});
 }
 
 function updateOne(row) {
-	return api.put("/entry/" + row.id, row);
+	return api.put("/entries/" + row.id, row);
 }
 
 function updateMany(rows) {
@@ -99,7 +99,7 @@ function updateMany(rows) {
 }
 
 function _delete(row) {
-	return api.delete("/entry/" + row.id);
+	return api.delete("/entries/" + row.id);
 }
 
 let order = {
