@@ -1,3 +1,4 @@
+let bluebird = require("bluebird");
 let {unauthorized, notFound, badRequest, ok} = require("../utils/responses");
 let requireAuth = require("../middleware/requireAuth");
 let authorisationHelpers = require("../modules/authorisationHelpers");
@@ -11,12 +12,28 @@ module.exports = function(app, core, db) {
 	
 	let router = Router(app);
 	
-	router.use(requireAuth, async function(req, res, next) {
+	router.use(requireAuth);
+	
+	async function userCanModify(user, ownerId) {
+		if (user.id === ownerId) {
+			return true;
+		}
+		
+		let owner = await User.by.id(ownerId);
+		
+		if (authorisationHelpers.isAdmin(user) || authorisationHelpers.isManagerOf(user, owner)) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	async function ownerAuth(req, res, next) {
 		let {user} = req;
 		
-		let userId = req.body.userId || req.query.userId;
+		let ownerId = req.body.userId || req.query.userId;
 		
-		if (!userId) {
+		if (!ownerId) {
 			if (authorisationHelpers.isAdmin(user)) {
 				return next();
 			} else {
@@ -24,20 +41,14 @@ module.exports = function(app, core, db) {
 			}
 		}
 		
-		userId = Number(userId);
-		
-		if (user.id !== userId) {
-			let owner = await User.by.id(userId);
-			
-			if (!authorisationHelpers.isAdmin(user) && !authorisationHelpers.isManagerOf(user, owner)) {
-				return unauthorized(res);
-			}
+		if (!await userCanModify(user, Number(ownerId))) {
+			return unauthorized(res);
 		}
 		
 		next();
-	});
+	}
 	
-	router.post("/", async function(req, res) {
+	router.post("/", ownerAuth, async function(req, res) {
 		let {
 			userId,
 			entry: {
@@ -57,7 +68,7 @@ module.exports = function(app, core, db) {
 		ok(res, entry);
 	});
 	
-	router.get("/", async function(req, res) {
+	router.get("/", ownerAuth, async function(req, res) {
 		let {
 			userId,
 			from,
@@ -105,6 +116,7 @@ module.exports = function(app, core, db) {
 	});
 	
 	router.delete("/:id", async function(req, res) {
+		let {user} = req;
 		let id = Number(req.params.id);
 		let entry = await Entry.by.id(id);
 		
@@ -112,7 +124,40 @@ module.exports = function(app, core, db) {
 			return notFound(res);
 		}
 		
+		if (!await userCanModify(user, entry.id)) {
+			return unauthorized(res);
+		}
+		
 		await entry.delete();
+		
+		ok(res);
+	});
+	
+	router.put("/", async function(req, res) {
+		let {user} = req;
+		
+		let entries = await bluebird.map(req.body, async function(entry) {
+			return {
+				entry: await Entry.by.id(entry.id),
+				update: entry,
+			};
+		});
+		
+		let authorized = true;
+		
+		await bluebird.all(entries.map(async function({entry}) {
+			if (!await userCanModify(user, entry.id)) {
+				authorized = false;
+			}
+		}));
+		
+		if (!authorized) {
+			return unauthorized(res);
+		}
+		
+		await bluebird.map(entries, async function({entry, update}) {
+			await entry.update(update);
+		});
 		
 		ok(res);
 	});

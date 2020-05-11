@@ -11,8 +11,7 @@ export let fields;
 export let fetch;
 export let newRow;
 export let create = null;
-export let updateOne;
-export let updateMany;
+export let update;
 export let _delete;
 export let order = null;
 
@@ -103,7 +102,7 @@ function confirmIfChanged() {
 }
 
 async function save() {
-	await updateMany(changedRows);
+	await update(changedRows);
 	
 	updateOriginalRows();
 }

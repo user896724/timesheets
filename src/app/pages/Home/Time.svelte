@@ -90,11 +90,7 @@ function create(row) {
 	});
 }
 
-function updateOne(row) {
-	return api.put("/entries/" + row.id, row);
-}
-
-function updateMany(rows) {
+function update(rows) {
 	return api.put("/entries", rows);
 }
 
@@ -133,8 +129,7 @@ let order = {
 		fetch={getEntries}
 		{newRow}
 		{create}
-		{updateOne}
-		{updateMany}
+		{update}
 		{_delete}
 		{order}
 	/>
