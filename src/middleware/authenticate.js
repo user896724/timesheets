@@ -5,6 +5,8 @@ module.exports = function(app, core) {
 		let token = req.headers["authorization"];
 		
 		if (token) {
+			token = token.replace(/^bearer\s+/i, "");
+			
 			try {
 				let userId = await jwt.verify(token, app.config.tokenSecret);
 				

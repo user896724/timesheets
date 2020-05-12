@@ -22,7 +22,7 @@ let api = axios.create({
 	baseURL: apiBase,
 });
 
-$: api.defaults.headers.common["Authorization"] = $authToken;
+$: api.defaults.headers.common["Authorization"] = "Bearer " + $authToken;
 
 setContext("api", api);
 setContext("notificationChannel", new NotificationChannel());
