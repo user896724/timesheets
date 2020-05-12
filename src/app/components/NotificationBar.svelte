@@ -17,7 +17,7 @@ channel.receive({
 		
 		notif = {
 			id: lid(),
-			type: "info",
+			type: "default",
 			component: null,
 			props: {},
 			...notif,
@@ -64,7 +64,7 @@ let dismissButton = {
 
 .default {
 	color: white;
-	background: #87B72D;
+	background: #87b72d;
 }
 
 .error {
