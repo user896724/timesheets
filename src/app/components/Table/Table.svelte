@@ -25,9 +25,11 @@ let result = {
 };
 
 let originalRows;
+let originalRowsById;
 
 function updateOriginalRows() {
-	originalRows = indexById(jsonCopy(result.rows));
+	originalRows = jsonCopy(result.rows);
+	originalRowsById = indexById(originalRows);
 }
 
 updateOriginalRows();
@@ -35,10 +37,8 @@ updateOriginalRows();
 $: sortedRows = order ? sortBy(result.rows, order.field, order.dir === "desc") : result.rows;
 
 $: changedRows = sortedRows.filter(function(row) {
-	return JSON.stringify(row) !== JSON.stringify(originalRows[row.id]);
+	return JSON.stringify(row) !== JSON.stringify(originalRowsById[row.id]);
 });
-
-
 
 let _new = null;
 let saving = false;
@@ -105,6 +105,10 @@ async function save() {
 	await update(changedRows);
 	
 	updateOriginalRows();
+}
+
+function cancelEdits() {
+	result.rows = jsonCopy(originalRows);
 }
 
 async function refresh() {
@@ -275,6 +279,11 @@ tr {
 				<Button
 					label="Save"
 					on:click={save}
+				/>
+				<Button
+					style="link"
+					on:click={cancelEdits}
+					label="Cancel"
 				/>
 			</div>
 		</div>
