@@ -1,4 +1,6 @@
+let jsonCopy = require("../utils/jsonCopy");
 let authorisationHelpers = require("../modules/authorisationHelpers");
+let defaultPrefs = require("../modules/defaultPrefs");
 
 module.exports = function(core, db) {
 	class User {
@@ -9,6 +11,7 @@ module.exports = function(core, db) {
 				name: "",
 				email: "",
 				password: "",
+				prefs: jsonCopy(defaultPrefs),
 			}, details);
 			
 			this.relationships = [];
@@ -100,6 +103,7 @@ module.exports = function(core, db) {
 				name: this.name,
 				email: this.email,
 				password: this.password,
+				prefs: this.prefs,
 			};
 		}
 	
@@ -109,6 +113,7 @@ module.exports = function(core, db) {
 				email: this.email,
 				name: this.name,
 				relationships: this.relationships,
+				prefs: this.prefs,
 			};
 		}
 	}
