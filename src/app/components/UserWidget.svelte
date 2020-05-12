@@ -98,6 +98,7 @@ a#button {
 		<div id="menuAnchor">
 			<div id="menu" on:click={toggle}>
 				<a href="/home">Home</a>
+				<a href="/home/prefs">Settings</a>
 				<a href="/logout">Log out</a>
 			</div>
 		</div>

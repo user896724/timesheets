@@ -8,6 +8,7 @@ import userStore from "../../stores/user";
 import Main from "../Main.svelte";
 import Time from "./Time.svelte";
 import Users from "./Users.svelte";
+import Prefs from "./Prefs.svelte";
 
 let location = getContext(LOCATION);
 </script>
@@ -58,6 +59,7 @@ let location = getContext(LOCATION);
 	<div id="page">
 		<Router>
 			<Route path="users" component={requireManager($userStore, Users)}/>
+			<Route path="/prefs" component={Prefs}/>
 			<Route path="/" component={Time}/>
 		</Router>
 	</div>

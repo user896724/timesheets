@@ -1,5 +1,6 @@
-let {conflict, badRequest, created} = require("../utils/responses");
+let {conflict, badRequest, unauthorized, created, ok} = require("../utils/responses");
 let hash = require("../utils/hash");
+let requireAuth = require("../middleware/requireAuth");
 let users = require("../modules/users");
 
 module.exports = function(app, core, db) {
@@ -29,5 +30,22 @@ module.exports = function(app, core, db) {
 		});
 		
 		created(res, user);
+	});
+	
+	app.patch("/users/:id", requireAuth, async function(req, res) {
+		let {user} = req;
+		let id = Number(req.params.id);
+		
+		if (user.id !== id) {
+			return unauthorized(res);
+		}
+		
+		if ("email" in req.body) {
+			return badRequest(res);
+		}
+		
+		await user.update(req.body);
+		
+		ok(res);
 	});
 }
