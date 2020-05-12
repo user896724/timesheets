@@ -59,14 +59,6 @@ module.exports = function(core, db) {
 			
 			page *= itemsPerPage;
 			
-			let query = select => `
-				select ${select} from entries
-				join users on users.id = entries.userId
-				${whereString}
-				${order ? "order by " + order.field + " " + order.dir : ""}
-				limit :itemsPerPage offset :page
-			`;
-			
 			let params = {
 				userId,
 				from,
@@ -75,8 +67,33 @@ module.exports = function(core, db) {
 				page,
 			}
 			
-			let total = await db.cell(query("count(*)"), params);
-			let rows = await db.query(query("entries.*, users.name as user"), params);
+			let total = await db.cell(`
+				select count(*) from entries
+				join users on users.id = entries.userId
+				${whereString}
+				${order ? "order by " + order.field + " " + order.dir : ""}
+				limit :itemsPerPage offset :page
+			`, params);
+			
+			let rows = await db.query(`
+				select
+					entries.*,
+					users.name as user,
+					(
+						select sum(hours) from entries e
+						where e.dateWorked = entries.dateWorked
+						and e.userId = entries.userId
+					) / (
+						select prefs->>"$.preferredWorkingHoursPerDay"
+						from users u
+						where u.id = users.id
+					) as ratio
+				from entries
+				join users on users.id = entries.userId
+				${whereString}
+				${order ? "order by " + order.field + " " + order.dir : ""}
+				limit :itemsPerPage offset :page
+			`, params);
 			
 			return {
 				total,

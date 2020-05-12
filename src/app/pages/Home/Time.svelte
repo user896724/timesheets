@@ -98,6 +98,12 @@ function _delete(row) {
 	return api.delete("/entries/" + row.id);
 }
 
+function rowStyle(row) {
+	return {
+		background: row.ratio >= 1 ? "#d0eaad" : "#eac8c8",
+	};
+}
+
 let order = {
 	field: "dateWorked",
 	dir: "desc",
@@ -132,5 +138,6 @@ let order = {
 		{update}
 		{_delete}
 		{order}
+		{rowStyle}
 	/>
 </div>

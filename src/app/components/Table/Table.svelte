@@ -3,6 +3,7 @@ import {onMount, createEventDispatcher} from "svelte";
 import jsonCopy from "../../../utils/jsonCopy";
 import {remove, push} from "../../../utils/arrayMethods";
 import {indexById, sortBy} from "../../../utils/collections";
+import inlineStyle from "../../../utils/dom/inlineStyle";
 import Button from "../Button.svelte";
 import OrderableTh from "./OrderableTh.svelte";
 import editorComponents from "./editors/components";
@@ -14,6 +15,7 @@ export let create = null;
 export let update;
 export let _delete;
 export let order = null;
+export let rowStyle = null;
 
 let fire = createEventDispatcher();
 
@@ -104,7 +106,7 @@ function confirmIfChanged() {
 async function save() {
 	await update(changedRows);
 	
-	updateOriginalRows();
+	refresh();
 }
 
 function cancelEdits() {
@@ -239,7 +241,7 @@ tr {
 					</tr>
 				{/if}
 				{#each sortedRows as row (row.id)}
-					<tr>
+					<tr style={inlineStyle(rowStyle && rowStyle(row))}>
 						{#each fields as field}
 							{#if field.type}
 								<td class="edit">
