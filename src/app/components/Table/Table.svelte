@@ -17,26 +17,26 @@ export let _delete;
 export let order = null;
 export let rowStyle = null;
 
+export async function refresh() {
+	rows = await fetch();
+	
+	updateOriginalRows();
+}
+
 let fire = createEventDispatcher();
 
-let result = {
-	rows: [],
-	page: 0,
-	total: 0,
-	itemsPerPage: 0,
-};
-
+let rows = [];
 let originalRows;
 let originalRowsById;
 
 function updateOriginalRows() {
-	originalRows = jsonCopy(result.rows);
+	originalRows = jsonCopy(rows);
 	originalRowsById = indexById(originalRows);
 }
 
 updateOriginalRows();
 
-$: sortedRows = order ? sortBy(result.rows, order.field, order.dir === "desc") : result.rows;
+$: sortedRows = order ? sortBy(rows, order.field, order.dir === "desc") : rows;
 
 $: changedRows = sortedRows.filter(function(row) {
 	return JSON.stringify(row) !== JSON.stringify(originalRowsById[row.id]);
@@ -110,13 +110,7 @@ async function save() {
 }
 
 function cancelEdits() {
-	result.rows = jsonCopy(originalRows);
-}
-
-async function refresh() {
-	result = await fetch();
-	
-	updateOriginalRows();
+	rows = jsonCopy(originalRows);
 }
 
 refresh();

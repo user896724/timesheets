@@ -39,13 +39,17 @@ function blur() {
 
 onMount(function() {
 	if (type === "date") {
-		datepicker(input, {
+		let options = {
 			formatter(input, date) {
 				value = moment(date).format("YYYY-MM-DD");
 			},
-			
-			dateSelected: new Date(value && value.toString() || new Date()),
-		});
+		};
+		
+		if (value) {
+			options.dateSelected = new Date(value.toString());
+		}
+		
+		datepicker(input, options);
 	}
 });
 </script>

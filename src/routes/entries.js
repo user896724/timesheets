@@ -1,6 +1,7 @@
 let bluebird = require("bluebird");
 let {unauthorized, notFound, badRequest, ok} = require("../utils/responses");
 let requireAuth = require("../middleware/requireAuth");
+let DateTime = require("../modules/types/DateTime");
 let authorisationHelpers = require("../modules/authorisationHelpers");
 let Router = require("../utils/routing/Router");
 
@@ -73,19 +74,7 @@ module.exports = function(app, core, db) {
 			userId,
 			from,
 			to,
-			page,
-			orderBy,
-			orderDir,
 		} = req.query;
-		
-		let order = null;
-		
-		if (orderBy) {
-			order = {
-				field: orderBy,
-				dir: orderDir,
-			};
-		}
 		
 		if (userId) {
 			userId = Number(userId);
@@ -99,20 +88,9 @@ module.exports = function(app, core, db) {
 			to = DateTime.fromString(to);
 		}
 		
-		page = Number(page) || 0;
-
-		let {
-			rows,
-			total,
-			itemsPerPage,
-		} = await Entry.list(userId, from, to, order, page);
+		let rows = await Entry.list(userId, from, to);
 		
-		res.json({
-			page,
-			rows,
-			total,
-			itemsPerPage,
-		});
+		res.json(rows);
 	});
 	
 	router.delete("/:id", async function(req, res) {

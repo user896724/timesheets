@@ -38,7 +38,7 @@ module.exports = function(core, db) {
 			}
 		}
 		
-		static async list(userId, from, to, order, page=0) {
+		static async list(userId, from, to) {
 			let where = [db.buildWhere({
 				userId,
 			})];
@@ -57,23 +57,11 @@ module.exports = function(core, db) {
 				whereString = "where " + whereString;
 			}
 			
-			page *= itemsPerPage;
-			
 			let params = {
 				userId,
 				from,
 				to,
-				itemsPerPage,
-				page,
 			}
-			
-			let total = await db.cell(`
-				select count(*) from entries
-				join users on users.id = entries.userId
-				${whereString}
-				${order ? "order by " + order.field + " " + order.dir : ""}
-				limit :itemsPerPage offset :page
-			`, params);
 			
 			let rows = await db.query(`
 				select
@@ -91,15 +79,9 @@ module.exports = function(core, db) {
 				from entries
 				join users on users.id = entries.userId
 				${whereString}
-				${order ? "order by " + order.field + " " + order.dir : ""}
-				limit :itemsPerPage offset :page
 			`, params);
 			
-			return {
-				total,
-				rows,
-				itemsPerPage,
-			};
+			return rows;
 		}
 		
 		get notes() {

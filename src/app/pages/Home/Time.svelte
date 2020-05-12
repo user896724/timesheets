@@ -3,6 +3,7 @@ import {getContext} from "svelte";
 import HttpStatus from "http-status-codes";
 import DateTime from "../../../modules/types/DateTime";
 import userStore from "../../stores/user";
+import Field from "../../components/forms/Field.svelte";
 import Button from "../../components/Button.svelte";
 import Table from "../../components/Table/Table.svelte";
 
@@ -16,6 +17,12 @@ let api = getContext("api");
 let notificationChannel = getContext("notificationChannel");
 
 let error;
+let table;
+
+let filters = {
+	from: null,
+	to: null,
+};
 
 let commonFields = [
 	{
@@ -46,17 +53,11 @@ $: fields = userId === $userStore.id ? commonFields : [
 	...commonFields,
 ];
 
-async function getEntries(page, filters, order) {
+async function getEntries() {
 	let params = {
-		user: $userStore.id,
-		page,
+		userId: $userStore.id,
 		...filters,
 	};
-	
-	if (order) {
-		params.orderBy = order.field;
-		params.orderDir = order.dir;
-	}
 	
 	try {
 		return (await api.get("/entries", {
@@ -66,12 +67,7 @@ async function getEntries(page, filters, order) {
 		error = e;
 	}
 	
-	return {
-		rows: [],
-		page: 0,
-		itemsPerPage: 0,
-		total: 0,
-	};
+	return [];
 }
 
 function newRow() {
@@ -104,6 +100,10 @@ function rowStyle(row) {
 	};
 }
 
+function refresh() {
+	table.refresh();
+}
+
 let order = {
 	field: "dateWorked",
 	dir: "desc",
@@ -116,6 +116,16 @@ let order = {
 	font-weight: bold;
 	margin-bottom: 1em;
 }
+
+#filters {
+	display: flex;
+	align-items: flex-end;
+	margin-bottom: 1em;
+	
+	> div {
+		margin-right: 1em;
+	}
+}
 </style>
 
 <div id="main">
@@ -123,7 +133,26 @@ let order = {
 		My time
 	</div>
 	<div id="filters">
-		
+		<div>
+			<Field
+				type="date"
+				label="From"
+				bind:value={filters.from}
+			/>
+		</div>
+		<div>
+			<Field
+				type="date"
+				label="To"
+				bind:value={filters.to}
+			/>
+		</div>
+		<div>
+			<Button
+				label="Update"
+				on:click={refresh}
+			/>
+		</div>
 	</div>
 	{#if error}
 		<div id="error">
@@ -131,6 +160,7 @@ let order = {
 		</div>
 	{/if}
 	<Table
+		bind:this={table}
 		{fields}
 		fetch={getEntries}
 		{newRow}
