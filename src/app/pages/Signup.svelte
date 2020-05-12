@@ -44,15 +44,14 @@ async function submit() {
 		});
 		
 		let {
-			authToken,
 			user,
+			authToken,
 		} = (await api.post("/login", {
 			email,
 			password,
 		})).data;
 		
 		$authTokenStore = authToken;
-		$userStore = user;
 		
 		await tick();
 		
@@ -60,6 +59,17 @@ async function submit() {
 			name: companyName,
 			adminUserId: user.id,
 		});
+		
+		/*
+		log in again to get the user with the new company attached
+		*/
+		
+		({user} = (await api.post("/login", {
+			email,
+			password,
+		})).data);
+		
+		$userStore = user;
 		
 		success = true;
 	} catch (e) {
