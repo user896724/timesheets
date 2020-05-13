@@ -102,7 +102,7 @@ module.exports = function(app, core, db) {
 			return notFound(res);
 		}
 		
-		if (!await userCanModify(user, entry.id)) {
+		if (!await userCanModify(user, entry.userId)) {
 			return unauthorized(res);
 		}
 		
