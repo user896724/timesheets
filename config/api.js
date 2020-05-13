@@ -41,8 +41,6 @@ let envs = {
 		svelteMail: svelteMail({
 			init: true,
 			watch: true,
-			liveReload: true,
-			liveReloadPort: 48011,
 			transpile: false,
 			minify: false,
 			rebuildOnRenderError: true,
