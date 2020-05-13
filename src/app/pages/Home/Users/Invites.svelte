@@ -23,14 +23,8 @@ let fields = [
 	},
 ];
 
-async function getInvites() {
-	try {
-		return (await api.get("/company/" + companyId + "/invites")).data;
-	} catch (e) {
-		error = e;
-	}
-	
-	return [];
+function getInvites() {
+	return api.get("/company/" + companyId + "/invites");
 }
 
 function newRow() {

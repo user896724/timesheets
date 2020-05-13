@@ -1,9 +1,7 @@
 <script>
 import {getContext} from "svelte";
-import HttpStatus from "http-status-codes";
 import authorisationHelpers from "../../../../modules/authorisationHelpers";
 import userStore from "../../../stores/user";
-import Button from "../../../components/Button.svelte";
 import Table from "../../../components/Table/Table.svelte";
 
 $: companyId = authorisationHelpers.getCompanyId($userStore);
@@ -26,16 +24,8 @@ let fields = [
 	},
 ];
 
-async function getUsers() {
-	try {
-		return (await api.get("/company/" + companyId + "/users", {
-			params,
-		})).data;
-	} catch (e) {
-		error = e;
-	}
-	
-	return [];
+function getUsers() {
+	return api.get("/company/" + companyId + "/workers");
 }
 
 function _delete(row) {

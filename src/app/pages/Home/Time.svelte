@@ -62,7 +62,7 @@ async function getEntries() {
 	try {
 		return (await api.get("/entries", {
 			params,
-		})).data;
+		}));
 	} catch (e) {
 		error = e;
 	}

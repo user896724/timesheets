@@ -18,10 +18,18 @@ export let order = null;
 export let rowStyle = null;
 export let viewDetail = null;
 
+let error;
+
+$: errorStatus = error && error.response && error.response.status;
+
 export async function refresh() {
-	rows = await fetch();
-	
-	updateOriginalRows();
+	try {
+		rows = (await fetch()).data;
+		
+		updateOriginalRows();
+	} catch (e) {
+		error = e;
+	}
 }
 
 let fire = createEventDispatcher();
@@ -53,12 +61,18 @@ function _newRow() {
 async function saveNew() {
 	saving = true;
 	
-	let row = await create(_new);
-	
-	saving = false;
-	_new = null;
-	
-	refresh();
+	try {
+		let row = await create(_new);
+		
+		saving = false;
+		_new = null;
+		
+		refresh();
+	} catch (e) {
+		error = e;
+	} finally {
+		saving = false;
+	}
 }
 
 function cancelNew() {
@@ -72,9 +86,13 @@ function confirmDelete(row) {
 }
 
 async function deleteRow(row) {
-	await _delete(row);
-	
-	refresh();
+	try {
+		await _delete(row);
+		
+		refresh();
+	} catch (e) {
+		error = e;
+	}
 }
 
 function clickOrder({detail: field}) {
@@ -105,9 +123,13 @@ function confirmIfChanged() {
 }
 
 async function save() {
-	await update(changedRows);
-	
-	refresh();
+	try {
+		await update(changedRows);
+		
+		refresh();
+	} catch (e) {
+		error = e;
+	}
 }
 
 function cancelEdits() {
@@ -176,6 +198,14 @@ tr {
 		margin-left: auto;
 	}
 }
+
+#error {
+	color: #D10000;
+	margin-bottom: 1em;
+	border: 2px solid #D1000050;
+	border-radius: 7px;
+	padding: .5em;
+}
 </style>
 
 <div id="main">
@@ -187,6 +217,11 @@ tr {
 			/>
 		{/if}
 	</div>
+	{#if error}
+		<div id="error">
+			An error occurred while communicating with the server.
+		</div>
+	{/if}
 	<div id="list">
 		<table>
 			<thead>
