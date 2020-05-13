@@ -238,7 +238,7 @@ tr {
 				{#each sortedRows as row (row.id)}
 					<tr style={inlineStyle(rowStyle && rowStyle(row))}>
 						{#each fields as field}
-							{#if field.type}
+							{#if field.type && field.editable !== false}
 								<td class="edit">
 									<svelte:component
 										this={editorComponents[field.type]}
