@@ -91,7 +91,7 @@ function update(rows) {
 }
 
 function _delete(row) {
-	return api.delete("/entries/" + row.id);
+	return api.delete("/entry/" + row.id);
 }
 
 function rowStyle(row) {

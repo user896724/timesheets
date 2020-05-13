@@ -3,17 +3,12 @@ let {unauthorized, notFound, badRequest, ok} = require("../utils/responses");
 let requireAuth = require("../middleware/requireAuth");
 let DateTime = require("../modules/types/DateTime");
 let authorisationHelpers = require("../modules/authorisationHelpers");
-let Router = require("../utils/routing/Router");
 
 module.exports = function(app, core, db) {
 	let {
 		Entry,
 		User,
 	} = core;
-	
-	let router = Router(app);
-	
-	router.use(requireAuth);
 	
 	async function userCanModify(user, ownerId) {
 		if (user.id === ownerId) {
@@ -49,7 +44,7 @@ module.exports = function(app, core, db) {
 		next();
 	}
 	
-	router.post("/", ownerAuth, async function(req, res) {
+	app.post("/entries", requireAuth, ownerAuth, async function(req, res) {
 		let {
 			userId,
 			entry: {
@@ -69,7 +64,7 @@ module.exports = function(app, core, db) {
 		ok(res, entry);
 	});
 	
-	router.get("/", ownerAuth, async function(req, res) {
+	app.get("/entries", requireAuth, ownerAuth, async function(req, res) {
 		let {
 			userId,
 			from,
@@ -93,7 +88,7 @@ module.exports = function(app, core, db) {
 		res.json(rows);
 	});
 	
-	router.delete("/:id", async function(req, res) {
+	app.delete("/entry/:id", requireAuth, async function(req, res) {
 		let {user} = req;
 		let id = Number(req.params.id);
 		let entry = await Entry.by.id(id);
@@ -111,7 +106,7 @@ module.exports = function(app, core, db) {
 		ok(res);
 	});
 	
-	router.put("/", async function(req, res) {
+	app.put("/entries", requireAuth, async function(req, res) {
 		let {user} = req;
 		
 		let entries = await bluebird.map(req.body, async function(entry) {
@@ -124,7 +119,7 @@ module.exports = function(app, core, db) {
 		let authorized = true;
 		
 		await bluebird.all(entries.map(async function({entry}) {
-			if (!await userCanModify(user, entry.id)) {
+			if (!await userCanModify(user, entry.userId)) {
 				authorized = false;
 			}
 		}));
@@ -139,6 +134,4 @@ module.exports = function(app, core, db) {
 		
 		ok(res);
 	});
-	
-	app.use("/entries", router);
 }
