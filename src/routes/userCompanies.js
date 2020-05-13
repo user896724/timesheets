@@ -8,10 +8,11 @@ module.exports = function(app, core, db) {
 		relationships,
 	} = core;
 	
-	app.post("/companies", requireAuth, async function(req, res) {
+	app.post("/user/:id/companies", requireAuth, async function(req, res) {
+		let adminUserId = Number(req.params.id);
+		
 		let {
 			name,
-			adminUserId,
 		} = req.body;
 		
 		let {user} = req;

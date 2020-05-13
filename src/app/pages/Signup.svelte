@@ -55,9 +55,8 @@ async function submit() {
 		
 		await tick();
 		
-		await api.post("/companies", {
+		await api.post("/user/" + user.id + "/companies", {
 			name: companyName,
-			adminUserId: user.id,
 		});
 		
 		/*
