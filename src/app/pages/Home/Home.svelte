@@ -60,7 +60,9 @@ let location = getContext(LOCATION);
 		<Router>
 			<Route path="users" component={requireManager($userStore, Users)}/>
 			<Route path="/prefs" component={Prefs}/>
-			<Route path="/" component={Time}/>
+			<Route path="/">
+				<Time {...$$props}/>
+			</Route>
 		</Router>
 	</div>
 </Main>

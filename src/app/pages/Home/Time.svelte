@@ -55,7 +55,7 @@ $: fields = userId === $userStore.id ? commonFields : [
 
 async function getEntries() {
 	let params = {
-		userId: $userStore.id,
+		userId,
 		...filters,
 	};
 	
@@ -130,7 +130,7 @@ let order = {
 
 <div id="main">
 	<div id="title">
-		My time
+		Time
 	</div>
 	<div id="filters">
 		<div>

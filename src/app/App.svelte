@@ -57,6 +57,7 @@ setContext("notificationChannel", new NotificationChannel());
 	<Route path="/signup" component={Signup}/>
 	<Route path="/join/:code" component={Join}/>
 	<Route path="/home/*" component={requireLogin($user, Home)}/>
+	<Route path="/time/:userId" component={requireLogin($user, Home)}/>
 	<Route path="/login" component={Login}/>
 	<Route path="/logout" component={Logout}/>
 	<Route component={_404}/>

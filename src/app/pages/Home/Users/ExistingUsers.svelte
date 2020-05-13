@@ -1,5 +1,6 @@
 <script>
 import {getContext} from "svelte";
+import {navigate} from "svelte-routing";
 import authorisationHelpers from "../../../../modules/authorisationHelpers";
 import userStore from "../../../stores/user";
 import Table from "../../../components/Table/Table.svelte";
@@ -32,6 +33,10 @@ function _delete(row) {
 	return api.delete("/company/" + companyId + "/worker/" + row.id);
 }
 
+function viewDetail(row) {
+	navigate("/time/" + row.id);
+}
+
 let order = null;
 </script>
 
@@ -44,4 +49,5 @@ let order = null;
 	fetch={getUsers}
 	{_delete}
 	{order}
+	{viewDetail}
 />
