@@ -7,7 +7,7 @@ import {requireManager} from "../../utils/routeGuards";
 import userStore from "../../stores/user";
 import Main from "../Main.svelte";
 import Time from "./Time.svelte";
-import Users from "./Users.svelte";
+import Users from "./Users/Users.svelte";
 import Prefs from "./Prefs.svelte";
 
 let location = getContext(LOCATION);

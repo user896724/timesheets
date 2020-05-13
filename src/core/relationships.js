@@ -30,6 +30,10 @@ module.exports = function(core, db) {
 		addManager(companyId, userId) {
 			return rel.add(userId, "manager", "company", companyId);
 		},
+		
+		joinCompany(companyId, userId) {
+			return rel.add(userId, "worker", "company", companyId);
+		},
 	};
 	
 	return rel;

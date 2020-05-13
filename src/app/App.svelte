@@ -10,6 +10,7 @@ import user from "./stores/user";
 import _404 from "./pages/404.svelte";
 import Index from "./pages/Index.svelte";
 import Signup from "./pages/Signup.svelte";
+import Join from "./pages/Join.svelte";
 import Home from "./pages/Home/Home.svelte";
 import Login from "./pages/Login.svelte";
 import Logout from "./pages/Logout.svelte";
@@ -54,6 +55,7 @@ setContext("notificationChannel", new NotificationChannel());
 <Router>
 	<Route path="/" component={Index}/>
 	<Route path="/signup" component={Signup}/>
+	<Route path="/join/:code" component={Join}/>
 	<Route path="/home/*" component={requireLogin($user, Home)}/>
 	<Route path="/login" component={Login}/>
 	<Route path="/logout" component={Logout}/>
