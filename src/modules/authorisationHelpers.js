@@ -37,6 +37,10 @@ let helpers = {
 		
 		return false;
 	},
+	
+	getCompanyId(user) {
+		return findRels(user, "manager", "company")[0].entityId;
+	},
 };
 
 module.exports = helpers;
