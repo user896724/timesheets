@@ -1,4 +1,4 @@
-let {conflict, unauthorized, badRequest, ok} = require("../utils/responses");
+let {conflict, unauthorized, badRequest, created, ok} = require("../utils/responses");
 let requireAuth = require("../middleware/requireAuth");
 let authorisationHelpers = require("../modules/authorisationHelpers");
 
@@ -34,6 +34,6 @@ module.exports = function(app, core, db) {
 		
 		await relationships.addManager(company.id, adminUserId);
 		
-		ok(res, company);
+		created(res, company);
 	});
 }
