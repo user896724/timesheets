@@ -16,6 +16,7 @@ export let update;
 export let _delete;
 export let order = null;
 export let rowStyle = null;
+export let viewDetail = null;
 
 export async function refresh() {
 	rows = await fetch();
@@ -258,6 +259,14 @@ tr {
 								css={changedRows.length > 0 && hideAction}
 								disabled={changedRows.length > 0}
 							/>
+							{#if viewDetail}
+								<Button
+									style="link"
+									label="View"
+									on:click={() => viewDetail(row)}
+									css={changedRows.length > 0 && hideAction}
+								/>
+							{/if}
 						</td>
 					</tr>
 				{/each}
