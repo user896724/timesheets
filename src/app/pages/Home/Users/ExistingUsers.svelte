@@ -29,7 +29,7 @@ function getUsers() {
 }
 
 function _delete(row) {
-	return api.delete("/company/" + companyId + "/users/" + row.id);
+	return api.delete("/company/" + companyId + "/worker/" + row.id);
 }
 
 let order = null;

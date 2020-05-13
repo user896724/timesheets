@@ -1,33 +1,47 @@
-let {unauthorized, created} = require("../utils/responses");
+let {unauthorized, notFound, ok} = require("../utils/responses");
 let requireAuth = require("../middleware/requireAuth");
 
 module.exports = function(app, core, db) {
 	let {
-		Invite,
-		relationships,
+		Company,
 	} = core;
 	
-	app.post("/company/:id/workers", requireAuth, async function(req, res) {
+	app.get("/company/:id/workers", requireAuth, async function(req, res) {
 		let companyId = Number(req.params.id);
-		let {userId} = req.body;
 		let {user} = req;
 		
-		if (userId !== user.id) {
+		if (!user.isManager(companyId)) {
 			return unauthorized(res);
 		}
 		
-		let invite = await Invite.find({
-			companyId,
-			email: user.email,
-		});
+		let company = await Company.by.id(companyId);
 		
-		if (!invite) {
+		if (!company) {
+			return notFound(res);
+		}
+		
+		let workers = await company.workers;
+		
+		ok(res, workers);
+	});
+	
+	app.delete("/company/:companyId/worker/:userId", requireAuth, async function(req, res) {
+		let companyId = Number(req.params.companyId);
+		let userId = Number(req.params.userId);
+		let {user} = req;
+		
+		if (!user.isManager(companyId)) {
 			return unauthorized(res);
 		}
 		
-		await relationships.joinCompany(companyId, userId);
-		await invite.delete();
+		let company = await Company.by.id(companyId);
 		
-		created(res);
+		if (!company) {
+			return notFound(res);
+		}
+		
+		await company.removeWorker(userId);
+		
+		ok(res);
 	});
 }

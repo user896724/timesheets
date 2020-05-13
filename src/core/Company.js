@@ -1,3 +1,5 @@
+let bluebird = require("bluebird");
+
 module.exports = function(core, db) {
 	class Company {
 		constructor(details={}) {
@@ -31,6 +33,31 @@ module.exports = function(core, db) {
 			} else {
 				return null;
 			}
+		}
+		
+		get workers() {
+			return db.query(`
+				select users.id, name, email
+				from users
+				inner join relationships
+				on users.id = relationships.userId
+				where relationships.type = 'worker'
+				and relationships.entityType = 'company'
+				and relationships.entityId = ?
+			`, [this.id]);
+		}
+		
+		removeWorker(userId) {
+			return db.query(`
+				delete from relationships
+				where userId = :userId
+				and type = 'worker'
+				and entityType = 'company'
+				and entityId = :companyId
+			`, {
+				companyId: this.id,
+				userId,
+			});
 		}
 		
 		async load(row) {
