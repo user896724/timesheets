@@ -29,6 +29,7 @@ export async function refresh() {
 		updateOriginalRows();
 	} catch (e) {
 		error = e;
+		rows = [];
 	}
 }
 
