@@ -3,11 +3,12 @@ import {onMount, getContext} from "svelte";
 import {Router, Route} from "svelte-routing";
 import {LOCATION} from "svelte-routing/src/contexts";
 import authorisationHelpers from "../../../modules/authorisationHelpers";
-import {requireManager} from "../../utils/routeGuards";
+import {requireManager, requireAdmin} from "../../utils/routeGuards";
 import userStore from "../../stores/user";
 import Main from "../Main.svelte";
 import Time from "./Time.svelte";
 import Users from "./Users/Users.svelte";
+import AllUsers from "./AllUsers.svelte";
 import Prefs from "./Prefs.svelte";
 
 let location = getContext(LOCATION);
@@ -55,10 +56,19 @@ let location = getContext(LOCATION);
 				Manage users
 			</a>
 		{/if}
+		{#if authorisationHelpers.isAdmin($userStore)}
+			<a
+				href="/home/all-users"
+				class:selected={$location.pathname === "/home/all-users"}
+			>
+				All users
+			</a>
+		{/if}
 	</div>
 	<div id="page">
 		<Router>
-			<Route path="users" component={requireManager($userStore, Users)}/>
+			<Route path="/all-users" component={requireAdmin($userStore, AllUsers)}/>
+			<Route path="/users" component={requireManager($userStore, Users)}/>
 			<Route path="/prefs" component={Prefs}/>
 			<Route path="/">
 				<Time {...$$props}/>

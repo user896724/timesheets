@@ -1,6 +1,7 @@
 let {conflict, badRequest, unauthorized, created, ok} = require("../utils/responses");
 let hash = require("../utils/hash");
 let requireAuth = require("../middleware/requireAuth");
+let authorisationHelpers = require("../modules/authorisationHelpers");
 let users = require("../modules/users");
 
 module.exports = function(app, core, db) {
@@ -47,5 +48,17 @@ module.exports = function(app, core, db) {
 		await user.update(req.body);
 		
 		ok(res);
+	});
+	
+	app.get("/users", requireAuth, async function(req, res) {
+		let {user} = req;
+		
+		if (!authorisationHelpers.isAdmin(user)) {
+			return unauthorized(res);
+		}
+		
+		let users = await db.query("select id, name, email from users");
+		
+		ok(res, users);
 	});
 }

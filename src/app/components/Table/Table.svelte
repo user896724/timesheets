@@ -13,7 +13,7 @@ export let fetch;
 export let newRow;
 export let create = null;
 export let update;
-export let _delete;
+export let _delete = null;
 export let order = null;
 export let rowStyle = null;
 export let viewDetail = null;
@@ -287,13 +287,15 @@ tr {
 							{/if}
 						{/each}
 						<td>
-							<Button
-								style="link"
-								label="Delete"
-								on:click={() => confirmDelete(row)}
-								css={changedRows.length > 0 && hideAction}
-								disabled={changedRows.length > 0}
-							/>
+							{#if _delete}
+								<Button
+									style="link"
+									label="Delete"
+									on:click={() => confirmDelete(row)}
+									css={changedRows.length > 0 && hideAction}
+									disabled={changedRows.length > 0}
+								/>
+							{/if}
 							{#if viewDetail}
 								<Button
 									style="link"

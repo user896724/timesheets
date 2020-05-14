@@ -8,3 +8,7 @@ export function requireLogin(user, component) {
 export function requireManager(user, component) {
 	return user && authorisationHelpers.isManager(user) ? component : null;
 }
+
+export function requireAdmin(user, component) {
+	return user && authorisationHelpers.isAdmin(user) ? component : null;
+}
