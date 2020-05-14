@@ -10,11 +10,15 @@ export let entry;
 let api = getContext("api");
 
 let notes;
-let loading = true;
+let loading = {};
 let error = null;
 let body = "";
 
+$: errorStatus = error && error.response && error.response.status;
+
 async function addNote() {
+	loading.addNote = true;
+	
 	try {
 		let note = (await api.post("/entry/" + entry.id + "/notes", {
 			body,
@@ -24,19 +28,25 @@ async function addNote() {
 			author: $userStore.name,
 			...note,
 		}, ...notes];
+		
+		body = "";
 	} catch (e) {
 		error = e;
 	}
+	
+	loading.addNote = false;
 }
 
 onMount(async function() {
+	loading.notes = true;
+	
 	try {
 		notes = (await api.get("/entry/" + entry.id + "/notes")).data;
 	} catch (e) {
 		error = e;
-	} finally {
-		loading = false;
 	}
+	
+	loading.notes = false;
 });
 </script>
 
@@ -114,10 +124,14 @@ onMount(async function() {
 	<div id="notes">
 		{#if error}
 			<div class="error">
-				An error occurred while communicating with the server
+				{#if errorStatus === HttpStatus.BAD_REQUEST}
+					Please enter a note
+				{:else}
+					An error occurred while communicating with the server
+				{/if}
 			</div>
 		{/if}
-		{#if loading}
+		{#if loading.notes}
 			Loading notes...
 		{:else if notes}
 			{#each notes as note}
@@ -144,7 +158,8 @@ onMount(async function() {
 			<div id="actions">
 				<Button
 					type="submit"
-					label="Add note"
+					label={loading.addNote ? "Adding note..." : "Add note"}
+					disabled={!body || loading.addNote}
 				/>
 			</div>
 		</form>

@@ -1,6 +1,5 @@
 <script>
 import {getContext} from "svelte";
-import HttpStatus from "http-status-codes";
 import userStore from "../../stores/user";
 import Field from "../../components/forms/Field.svelte";
 import Button from "../../components/Button.svelte";
@@ -8,19 +7,33 @@ import Button from "../../components/Button.svelte";
 let api = getContext("api");
 let notificationChannel = getContext("notificationChannel");
 
+let saving = false;
+let error;
+
 async function save() {
-	await api.patch("/users/" + $userStore.id, {
-		prefs: $userStore.prefs,
-	});
+	saving = true;
+	error = null;
 	
-	notificationChannel.send({
-		message: "Preferences updated",
-		time: 2000,
-	});
+	try {
+		await api.patch("/users/" + $userStore.id, {
+			prefs: $userStore.prefs,
+		});
+		
+		notificationChannel.send({
+			message: "Preferences updated",
+			time: 2000,
+		});
+	} catch (e) {
+		error = e;
+	}
+	
+	saving = false;
 }
 </script>
 
 <style>
+@import "../../css/classes/error";
+
 #title {
 	font-size: 1.2em;
 	font-weight: bold;
@@ -41,6 +54,11 @@ form {
 	<div id="title">
 		Preferences
 	</div>
+	{#if error}
+		<div class="error">
+			An error occurred while communicating with the server
+		</div>
+	{/if}
 	<form on:submit|preventDefault={save}>
 		<Field
 			type="number"
@@ -50,7 +68,8 @@ form {
 		<div id="actions">
 			<Button
 				type="submit"
-				label="Save"
+				label={saving ? "Saving..." : "Save"}
+				disabled={saving}
 			/>
 		</div>
 	</form>

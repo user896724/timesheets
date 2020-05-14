@@ -23,6 +23,8 @@ let error;
 $: errorStatus = error && error.response && error.response.status;
 
 export async function refresh() {
+	loading.fetch = true;
+	
 	try {
 		rows = (await fetch()).data;
 		
@@ -31,6 +33,8 @@ export async function refresh() {
 		error = e;
 		rows = [];
 	}
+	
+	loading.fetch = false;
 }
 
 let fire = createEventDispatcher();
@@ -38,6 +42,7 @@ let fire = createEventDispatcher();
 let rows = [];
 let originalRows;
 let originalRowsById;
+let loading = {};
 
 function updateOriginalRows() {
 	originalRows = jsonCopy(rows);
@@ -53,27 +58,25 @@ $: changedRows = sortedRows.filter(function(row) {
 });
 
 let _new = null;
-let saving = false;
 
 function _newRow() {
 	_new = newRow();
 }
 
 async function saveNew() {
-	saving = true;
+	loading.create = true;
 	
 	try {
 		let row = await create(_new);
 		
-		saving = false;
 		_new = null;
 		
 		refresh();
 	} catch (e) {
 		error = e;
-	} finally {
-		saving = false;
 	}
+	
+	loading.create = false;
 }
 
 function cancelNew() {
@@ -87,6 +90,8 @@ function confirmDelete(row) {
 }
 
 async function deleteRow(row) {
+	loading.delete = true;
+	
 	try {
 		await _delete(row);
 		
@@ -94,6 +99,8 @@ async function deleteRow(row) {
 	} catch (e) {
 		error = e;
 	}
+	
+	loading.delete = false;
 }
 
 function clickOrder({detail: field}) {
@@ -124,6 +131,8 @@ function confirmIfChanged() {
 }
 
 async function save() {
+	loading.save = true;
+	
 	try {
 		await update(changedRows);
 		
@@ -131,6 +140,8 @@ async function save() {
 	} catch (e) {
 		error = e;
 	}
+	
+	loading.save = false;
 }
 
 function cancelEdits() {
@@ -154,6 +165,7 @@ let saveButton = {
 </script>
 
 <style>
+@import "../../css/classes/error";
 
 #main {
 }
@@ -199,14 +211,6 @@ tr {
 		margin-left: auto;
 	}
 }
-
-#error {
-	color: #D10000;
-	margin-bottom: 1em;
-	border: 2px solid #D1000050;
-	border-radius: 7px;
-	padding: .5em;
-}
 </style>
 
 <div id="main">
@@ -219,7 +223,7 @@ tr {
 		{/if}
 	</div>
 	{#if error}
-		<div id="error">
+		<div class="error">
 			An error occurred while communicating with the server.
 		</div>
 	{/if}
@@ -260,7 +264,8 @@ tr {
 						<td>
 							<Button
 								css={saveButton}
-								label="Save"
+								label={loading.create ? "Saving..." : "Save"}
+								disabled={loading.create}
 								on:click={saveNew}
 							/>
 							<Button
@@ -271,43 +276,50 @@ tr {
 						</td>
 					</tr>
 				{/if}
-				{#each sortedRows as row (row.id)}
-					<tr style={inlineStyle(rowStyle && rowStyle(row))}>
-						{#each fields as field}
-							{#if field.type && field.editable !== false}
-								<td class="edit">
-									<svelte:component
-										this={editorComponents[field.type]}
-										bind:value={row[field.name]}
-									/>
-								</td>
-							{:else}
-								<td>
-									{row[field.name]}
-								</td>
-							{/if}
-						{/each}
-						<td>
-							{#if _delete}
-								<Button
-									style="link"
-									label="Delete"
-									on:click={() => confirmDelete(row)}
-									css={changedRows.length > 0 && hideAction}
-									disabled={changedRows.length > 0}
-								/>
-							{/if}
-							{#if viewDetail}
-								<Button
-									style="link"
-									label="View"
-									on:click={() => viewDetail(row)}
-									css={changedRows.length > 0 && hideAction}
-								/>
-							{/if}
+				{#if loading.fetch}
+					<tr>
+						<td colspan={fields.length + 1}>
+							Loading...
 						</td>
 					</tr>
-				{/each}
+				{:else}
+					{#each sortedRows as row (row.id)}
+						<tr style={inlineStyle(rowStyle && rowStyle(row))}>
+							{#each fields as field}
+								{#if field.type && field.editable !== false}
+									<td class="edit">
+										<svelte:component
+											this={editorComponents[field.type]}
+											bind:value={row[field.name]}
+										/>
+									</td>
+								{:else}
+									<td>
+										{row[field.name]}
+									</td>
+								{/if}
+							{/each}
+							<td>
+								{#if _delete}
+									<Button
+										style="link"
+										label={loading.delete ? "Deleting..." : "Delete"}
+										on:click={() => confirmDelete(row)}
+										css={changedRows.length > 0 && hideAction}
+									/>
+								{/if}
+								{#if viewDetail}
+									<Button
+										style="link"
+										label="View"
+										on:click={() => viewDetail(row)}
+										css={changedRows.length > 0 && hideAction}
+									/>
+								{/if}
+							</td>
+						</tr>
+					{/each}
+				{/if}
 			</tbody>
 		</table>
 	</div>
@@ -320,7 +332,8 @@ tr {
 			</div>
 			<div>
 				<Button
-					label="Save"
+					label={loading.save ? "Saving..." : "Save"}
+					disabled={loading.save}
 					on:click={save}
 				/>
 				<Button
