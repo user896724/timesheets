@@ -30,7 +30,7 @@ setContext("notificationChannel", new NotificationChannel());
 </script>
 
 <svelte:head>
-	<title>Timesheets</title>
+	<title>TimeSheets</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://unpkg.com/js-datepicker/dist/datepicker.min.css">
