@@ -85,7 +85,26 @@ module.exports = function(core, db) {
 		}
 		
 		get notes() {
-			return db.table("select * from entryNotes where id = ?", [this.id]);
+			return db.query(`
+				select entryNotes.*, users.name as author
+				from entryNotes
+				inner join users on users.id = entryNotes.userId
+				where entryId = ?
+				order by createdAt desc
+			`, [this.id]);
+		}
+		
+		async addNote(userId, body) {
+			let row = {
+				createdAt: db.now(),
+				userId,
+				entryId: this.id,
+				body,
+			};
+			
+			await db.insert("entryNotes", row);
+			
+			return row;
 		}
 		
 		async load(row) {
@@ -96,15 +115,6 @@ module.exports = function(core, db) {
 			Object.assign(this, details);
 			
 			await this.save();
-		}
-		
-		addNote(userId, note) {
-			return db.insert("entryNotes", {
-				createdAt: db.now(),
-				userId,
-				entryId: this.id,
-				note,
-			});
 		}
 		
 		async save() {

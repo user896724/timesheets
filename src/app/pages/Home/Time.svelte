@@ -3,9 +3,11 @@ import {getContext} from "svelte";
 import HttpStatus from "http-status-codes";
 import DateTime from "../../../modules/types/DateTime";
 import userStore from "../../stores/user";
+import Modal from "../../components/Modal.svelte";
 import Field from "../../components/forms/Field.svelte";
 import Button from "../../components/Button.svelte";
 import Table from "../../components/Table/Table.svelte";
+import EntryDetail from "./EntryDetail.svelte";
 
 export let userId = null;
 
@@ -16,6 +18,7 @@ $: if (!userId) {
 let api = getContext("api");
 let notificationChannel = getContext("notificationChannel");
 
+let showDetail = null;
 let error;
 let table;
 
@@ -100,6 +103,14 @@ function rowStyle(row) {
 	};
 }
 
+function viewDetail(row) {
+	showDetail = row;
+}
+
+function closeDetail() {
+	showDetail = null;
+}
+
 function refresh() {
 	table.refresh();
 }
@@ -127,6 +138,12 @@ let order = {
 	}
 }
 </style>
+
+{#if showDetail}
+	<Modal on:close={closeDetail}>
+		<EntryDetail entry={showDetail}/>
+	</Modal>
+{/if}
 
 <div id="main">
 	<div id="title">
@@ -169,5 +186,6 @@ let order = {
 		{_delete}
 		{order}
 		{rowStyle}
+		{viewDetail}
 	/>
 </div>
