@@ -11,14 +11,12 @@ import Main from "./Main.svelte";
 
 export let code;
 
-console.log(code);
-
 let api = getContext("api");
 let notificationChannel = getContext("notificationChannel");
 
-let name = "234";
-let email = "234@Asd";
-let password = "234234234";
+let name = "";
+let email = "";
+let password = "";
 
 let loading = false;
 let success = false;
