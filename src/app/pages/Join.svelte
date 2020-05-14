@@ -106,6 +106,8 @@ let inputRow = {
 </script>
 
 <style>
+@import "../css/classes/error";
+
 #intro {
 	text-align: center;
 	width: 800px;
@@ -141,14 +143,6 @@ let inputRow = {
 	font-size: 1.2em;
 	font-weight: bold;
 	margin-bottom: .7em;
-}
-
-.error {
-	color: #D10000;
-	margin-bottom: 1em;
-	border: 2px solid #D1000050;
-	border-radius: 7px;
-	padding: .5em;
 }
 
 #actions {
@@ -248,7 +242,7 @@ let inputRow = {
 							{#if errorStatus === HttpStatus.NOT_FOUND || errorStatus === HttpStatus.UNAUTHORIZED}
 								Sorry, we couldn't find a valid invitation for this email.
 							{:else}
-								{error}
+								An error occurred while communicating with the server
 							{/if}
 						</div>
 					{/if}

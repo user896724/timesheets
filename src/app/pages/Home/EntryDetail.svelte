@@ -41,6 +41,8 @@ onMount(async function() {
 </script>
 
 <style>
+@import "../../css/classes/error";
+
 #hours {
 	font-size: 1.1em;
 	font-weight: bold;
@@ -112,7 +114,7 @@ onMount(async function() {
 	<div id="notes">
 		{#if error}
 			<div class="error">
-				{error}
+				An error occurred while communicating with the server
 			</div>
 		{/if}
 		{#if loading}

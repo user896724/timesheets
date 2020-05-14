@@ -99,6 +99,8 @@ let inputRow = {
 </script>
 
 <style>
+@import "../css/classes/error";
+
 #intro {
 	text-align: center;
 	width: 800px;
@@ -134,14 +136,6 @@ let inputRow = {
 	font-size: 1.2em;
 	font-weight: bold;
 	margin-bottom: .7em;
-}
-
-.error {
-	color: #D10000;
-	margin-bottom: 1em;
-	border: 2px solid #D1000050;
-	border-radius: 7px;
-	padding: .5em;
 }
 
 #actions {
@@ -246,7 +240,11 @@ let inputRow = {
 					/>
 					{#if error}
 						<div class="error" out:scale={scaleInOut}>
-							{error}
+							{#if errorStatus === HttpStatus.CONFLICT}
+								The email you provided is already registered
+							{:else}
+								An error occurred while communicating with the server
+							{/if}
 						</div>
 					{/if}
 					<div id="actions">

@@ -122,6 +122,8 @@ let order = {
 </script>
 
 <style>
+@import "../../css/classes/error";
+
 #title {
 	font-size: 1.2em;
 	font-weight: bold;
@@ -172,8 +174,8 @@ let order = {
 		</div>
 	</div>
 	{#if error}
-		<div id="error">
-			{error}
+		<div class="error">
+			An error occurred while communicating with the server
 		</div>
 	{/if}
 	<Table

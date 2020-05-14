@@ -9,8 +9,6 @@ import Table from "../../../components/Table/Table.svelte";
 let api = getContext("api");
 let notificationChannel = getContext("notificationChannel");
 
-let error;
-
 $: companyId = authorisationHelpers.getCompanyId($userStore);
 
 let fields = [
@@ -47,11 +45,6 @@ function _delete(row) {
 </style>
 
 <div id="main">
-	{#if error}
-		<div id="error">
-			{error}
-		</div>
-	{/if}
 	<Table
 		{fields}
 		fetch={getInvites}

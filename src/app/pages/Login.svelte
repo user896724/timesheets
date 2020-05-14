@@ -58,6 +58,8 @@ let inputRow = {
 </script>
 
 <style>
+@import "../css/classes/error";
+
 #intro {
 	text-align: center;
 	width: 800px;
@@ -79,14 +81,6 @@ let inputRow = {
 	padding: 1.3em;
 	box-shadow: 0px 2px 3px 0 #00000020;
 	background: white;
-}
-
-.error {
-	color: #D10000;
-	margin-bottom: 1em;
-	border: 2px solid #D1000050;
-	border-radius: 7px;
-	padding: .5em;
 }
 
 #actions {
@@ -125,7 +119,7 @@ let inputRow = {
 						{#if errorStatus === HttpStatus.UNAUTHORIZED}
 							Email/password not recognised.
 						{:else}
-							{error}
+							An error occurred while communicating with the server
 						{/if}
 					</div>
 				{/if}
