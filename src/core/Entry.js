@@ -1,3 +1,5 @@
+let bluebird = require("bluebird");
+
 module.exports = function(core, db) {
 	let itemsPerPage = 10;
 
@@ -38,7 +40,7 @@ module.exports = function(core, db) {
 			}
 		}
 		
-		static async list(userId, from, to) {
+		static async list(userId, from, to, includeNotes=false) {
 			let where = [db.buildWhere({
 				userId,
 			})];
@@ -81,17 +83,30 @@ module.exports = function(core, db) {
 				${whereString}
 			`, params);
 			
+			if (includeNotes) {
+				rows = await bluebird.map(rows, async function(entry) {
+					return {
+						...entry,
+						notes: await Entry.getNotes(entry.id),
+					};
+				});
+			}
+			
 			return rows;
 		}
 		
-		get notes() {
+		static getNotes(entryId) {
 			return db.query(`
 				select entryNotes.*, users.name as author
 				from entryNotes
 				inner join users on users.id = entryNotes.userId
 				where entryId = ?
 				order by createdAt desc
-			`, [this.id]);
+			`, [entryId]);
+		}
+		
+		get notes() {
+			return Entry.getNotes(this.id);
 		}
 		
 		async addNote(userId, body) {

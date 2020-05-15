@@ -69,6 +69,7 @@ module.exports = function(app, core, db) {
 			userId,
 			from,
 			to,
+			includeNotes,
 		} = req.query;
 		
 		if (userId) {
@@ -83,7 +84,7 @@ module.exports = function(app, core, db) {
 			to = DateTime.fromString(to);
 		}
 		
-		let rows = await Entry.list(userId, from, to);
+		let rows = await Entry.list(userId, from, to, includeNotes);
 		
 		res.json(rows);
 	});
