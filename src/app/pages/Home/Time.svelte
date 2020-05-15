@@ -8,6 +8,7 @@ import Field from "../../components/forms/Field.svelte";
 import Button from "../../components/Button.svelte";
 import Table from "../../components/Table/Table.svelte";
 import EntryDetail from "./EntryDetail.svelte";
+import Export from "./Export.svelte";
 
 export let userId = null;
 
@@ -19,6 +20,8 @@ let api = getContext("api");
 let notificationChannel = getContext("notificationChannel");
 
 let showDetail = null;
+let showExport = false;
+let exportEntries;
 let error;
 let table;
 
@@ -56,21 +59,19 @@ $: fields = userId === $userStore.id ? commonFields : [
 	...commonFields,
 ];
 
-async function getEntries() {
+function getEntries(includeNotes=false) {
 	let params = {
 		userId,
 		...filters,
 	};
 	
-	try {
-		return (await api.get("/entries", {
-			params,
-		}));
-	} catch (e) {
-		error = e;
+	if (includeNotes) {
+		params.includeNotes = true;
 	}
 	
-	return [];
+	return api.get("/entries", {
+		params,
+	});
 }
 
 function newRow() {
@@ -111,6 +112,20 @@ function closeDetail() {
 	showDetail = null;
 }
 
+function closeExport() {
+	showExport = false;
+}
+
+async function exportToHtml() {
+	try {
+		exportEntries = (await getEntries(true)).data;
+		console.log(exportEntries);
+		showExport = true;
+	} catch (e) {
+		error = e;
+	}
+}
+
 function refresh() {
 	table.refresh();
 }
@@ -139,11 +154,21 @@ let order = {
 		margin-right: 1em;
 	}
 }
+
+#actions {
+	margin-top: 1em;
+}
 </style>
 
 {#if showDetail}
 	<Modal on:close={closeDetail}>
 		<EntryDetail entry={showDetail}/>
+	</Modal>
+{/if}
+
+{#if showExport}
+	<Modal on:close={closeExport}>
+		<Export entries={exportEntries}/>
 	</Modal>
 {/if}
 
@@ -190,4 +215,10 @@ let order = {
 		{rowStyle}
 		{viewDetail}
 	/>
+	<div id="actions">
+		<Button
+			label="Export as HTML"
+			on:click={exportToHtml}
+		/>
+	</div>
 </div>
