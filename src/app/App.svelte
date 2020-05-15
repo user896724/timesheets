@@ -14,6 +14,7 @@ import Join from "./pages/Join.svelte";
 import Home from "./pages/Home/Home.svelte";
 import Login from "./pages/Login.svelte";
 import Logout from "./pages/Logout.svelte";
+import Export from "./pages/Export.svelte";
 
 let {
 	apiBase,
@@ -60,5 +61,6 @@ setContext("notificationChannel", new NotificationChannel());
 	<Route path="/time/:userId" component={requireLogin($user, Home)}/>
 	<Route path="/login" component={Login}/>
 	<Route path="/logout" component={Logout}/>
+	<Route path="/export" component={Export}/>
 	<Route component={_404}/>
 </Router>

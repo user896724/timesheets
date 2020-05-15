@@ -1,6 +1,8 @@
 <script>
 import {getContext} from "svelte";
+import {navigate} from "svelte-routing";
 import HttpStatus from "http-status-codes";
+import query from "../../../utils/query";
 import DateTime from "../../../modules/types/DateTime";
 import userStore from "../../stores/user";
 import Modal from "../../components/Modal.svelte";
@@ -8,7 +10,6 @@ import Field from "../../components/forms/Field.svelte";
 import Button from "../../components/Button.svelte";
 import Table from "../../components/Table/Table.svelte";
 import EntryDetail from "./EntryDetail.svelte";
-import Export from "./Export.svelte";
 
 export let userId = null;
 
@@ -20,8 +21,6 @@ let api = getContext("api");
 let notificationChannel = getContext("notificationChannel");
 
 let showDetail = null;
-let showExport = false;
-let exportEntries;
 let error;
 let table;
 
@@ -59,15 +58,11 @@ $: fields = userId === $userStore.id ? commonFields : [
 	...commonFields,
 ];
 
-function getEntries(includeNotes=false) {
+function getEntries() {
 	let params = {
 		userId,
 		...filters,
 	};
-	
-	if (includeNotes) {
-		params.includeNotes = true;
-	}
 	
 	return api.get("/entries", {
 		params,
@@ -112,18 +107,11 @@ function closeDetail() {
 	showDetail = null;
 }
 
-function closeExport() {
-	showExport = false;
-}
-
-async function exportToHtml() {
-	try {
-		exportEntries = (await getEntries(true)).data;
-		console.log(exportEntries);
-		showExport = true;
-	} catch (e) {
-		error = e;
-	}
+function viewExport() {
+	navigate("/export" + query.build({
+		userId,
+		...filters,
+	}));
 }
 
 function refresh() {
@@ -163,12 +151,6 @@ let order = {
 {#if showDetail}
 	<Modal on:close={closeDetail}>
 		<EntryDetail entry={showDetail}/>
-	</Modal>
-{/if}
-
-{#if showExport}
-	<Modal on:close={closeExport}>
-		<Export entries={exportEntries}/>
 	</Modal>
 {/if}
 
@@ -217,8 +199,9 @@ let order = {
 	/>
 	<div id="actions">
 		<Button
+			style="link"
 			label="Export as HTML"
-			on:click={exportToHtml}
+			on:click={viewExport}
 		/>
 	</div>
 </div>
