@@ -20,7 +20,5 @@ module.exports = function(config, db) {
 			body: html,
 			attachments,
 		});
-		
-		// TODO smtp transport
 	}
 }
